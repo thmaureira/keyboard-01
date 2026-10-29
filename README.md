@@ -87,10 +87,6 @@ These are the kana printed on Japanese keycaps (JIS layout for kana input). Each
 
 `corne/corne-dojo.html` (open it in a browser; the same page is in `docs/index.html` for GitHub Pages). It opens on FULL and, below, shows the layers stacked in 3D (click one to see it). It lights up the key and layer of what you type, and has a practice mode that repeats the characters you struggle with more often. Published at https://claude.ai/artifact/FbiRLyb5SXwaoRFzvND5iT
 
-### Publishing on GitHub Pages
-
-`tools/build_dojo.py` also writes `docs/index.html`. With the repo on GitHub: **Settings → Pages → Deploy from a branch → `main` / `/docs`**. It ends up at `https://<user>.github.io/<repo>/`. GitHub Pages is public even if the repo is private (except on Enterprise plans). The "Show / hide the map" button only works on a Mac with Hammerspoon.
-
 ## Files
 
 | File | What it is |
