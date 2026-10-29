@@ -1,0 +1,562 @@
+layout:
+  qmk_keyboard: crkbd/rev1
+  layout_name: LAYOUT_split_3x6_3
+layers:
+  FULL:
+  - - t: Esc
+      tr: º
+      bl: RGB
+      tl: 2×Caps
+      type: td-tl
+    - t: Q
+      tl: '1'
+      tr: '!'
+    - t: W
+      tl: '2'
+      tr: '@'
+    - t: E
+      tl: '3'
+      tr: '#'
+    - t: R
+      tl: '4'
+      tr: $
+    - t: T
+      tl: '5'
+      tr: '%'
+    - t: Y
+      tl: '6'
+      tr: ^
+      bl: '7'
+    - t: U
+      tl: '7'
+      tr: '&'
+      bl: '8'
+    - t: I
+      tl: '8'
+      tr: '*'
+      bl: '9'
+    - t: O
+      tl: '9'
+      tr: (
+      bl: '-'
+    - t: P
+      tl: '0'
+      tr: )
+      bl: /
+    - t: ⌫
+  - - t: Tab
+      bl: Mode
+    - t: A
+      tl: W→
+      bl: Hue+
+      tr: 2×@
+      type: td-tr
+    - t: S
+      tl: W↓
+      bl: Sat+
+    - t: D
+      tl: RClk
+      bl: Bri+
+    - t: F
+      tl: M↑
+    - t: G
+      tl: Click
+    - t: H
+      tl: MCtl
+      tr: '-'
+      bl: '4'
+    - t: J
+      tl: ↑
+      tr: '='
+      bl: '5'
+    - t: K
+      tl: ◂◂
+      tr: '['
+      bl: '6'
+    - t: L
+      tl: ▸▸
+      tr: ']'
+      bl: +
+    - t: Ñ
+      tl: Mute
+      tr: \
+      bl: '*'
+    - t: ´
+      tl: Play
+      tr: '`'
+  - - t: Shift
+      bl: Hue−
+    - t: Z
+      tl: W←
+      bl: Sat−
+    - t: X
+      tl: W↑
+      bl: Bri−
+    - t: C
+      tl: M←
+    - t: V
+      tl: M↓
+    - t: B
+      tl: M→
+    - t: N
+      tl: ←
+      tr: _
+      bl: '1'
+    - t: M
+      tl: ↓
+      tr: +
+      bl: '2'
+    - t: ','
+      tl: →
+      tr: '{'
+      bl: '3'
+    - t: .
+      tl: MCtl
+      tr: '}'
+      bl: '='
+    - t: '-'
+      tl: LPad
+      tr: '|'
+      bl: ·
+    - t: AltGr
+      tl: PrtSc
+      tr: '~'
+  - - t: Cmd
+    - t: LOWER
+      type: lk-lower
+    - t: ␣
+    - t: ⏎ Enter
+    - t: RAISE
+      type: lk-raise
+    - t: Ctrl
+      bl: '0'
+      tl: 2×MCtl
+      type: td-tl
+  QWERTY:
+  - - t: Esc
+      s: '2×: Caps'
+    - t: Q
+      right: タ
+    - t: W
+      right: テ
+    - t: E
+      right: イ
+    - t: R
+      right: ス
+    - t: T
+      right: カ
+    - t: Y
+      right: ン
+    - t: U
+      right: ナ
+    - t: I
+      right: ニ
+    - t: O
+      right: ラ
+    - t: P
+      right: セ
+    - t: ⌫
+  - - t: Tab
+    - t: A
+      s: '2×: @'
+      right: チ
+    - t: S
+      right: ト
+    - t: D
+      right: シ
+    - t: F
+      right: ハ
+    - t: G
+      right: キ
+    - t: H
+      right: ク
+    - t: J
+      right: マ
+    - t: K
+      right: ノ
+    - t: L
+      right: リ
+    - t: Ñ
+    - t: ´
+  - - t: Shift
+    - t: Z
+      right: ツ
+    - t: X
+      right: サ
+    - t: C
+      right: ソ
+    - t: V
+      right: ヒ
+    - t: B
+      right: コ
+    - t: N
+      right: ミ
+    - t: M
+      right: モ
+    - t: ','
+    - t: .
+    - t: '-'
+    - t: AltGr
+  - - t: Cmd
+    - t: LOWER
+      s: TT · layer
+      type: lk-lower
+    - t: ␣
+    - t: ⏎ Enter
+    - t: RAISE
+      s: TT · layer
+      type: lk-raise
+    - t: Ctrl
+      s: '2×: Mission Ctrl'
+  LOWER:
+  - - t: Esc
+      s: '2×: Caps'
+      type: led-85ff00
+    - t: '1'
+      type: led-7a00ff
+    - t: '2'
+      type: led-7a00ff
+    - t: '3'
+      type: led-7a00ff
+    - t: '4'
+      type: led-7a00ff
+    - t: '5'
+      type: led-7a00ff
+    - t: '6'
+      type: led-7a00ff
+    - t: '7'
+      type: led-7a00ff
+    - t: '8'
+      type: led-7a00ff
+    - t: '9'
+      type: led-7a00ff
+    - t: '0'
+      type: led-7a00ff
+    - t: ⌫
+      type: led-85ff00
+  - - t: Tab
+      type: led-85ff00
+    - t: Wheel →
+      type: led-7a00ff
+    - t: Wheel ↓
+      type: led-7a00ff
+    - t: Right click
+      type: led-7a00ff
+    - t: Mouse ↑
+      type: led-7a00ff
+    - t: Click
+      type: led-7a00ff
+    - t: Mission Ctrl
+      type: led-7a00ff
+    - t: ↑
+      type: led-7a00ff
+    - t: ◂◂
+      h: Rew
+      type: led-7a00ff
+    - t: ▸▸
+      h: FFwd
+      type: led-7a00ff
+    - t: Mute
+      type: led-7a00ff
+    - t: Play
+      type: led-85ff00
+  - - t: Shift
+      type: led-85ff00
+    - t: Wheel ←
+      type: led-7a00ff
+    - t: Wheel ↑
+      type: led-7a00ff
+    - t: Mouse ←
+      type: led-7a00ff
+    - t: Mouse ↓
+      type: led-7a00ff
+    - t: Mouse →
+      type: led-7a00ff
+    - t: ←
+      type: led-7a00ff
+    - t: ↓
+      type: led-7a00ff
+    - t: →
+      type: led-7a00ff
+    - t: Mission Ctrl
+      type: led-7a00ff
+    - t: Launchpad
+      type: led-7a00ff
+    - t: PrtSc
+      type: led-85ff00
+  - - t: Cmd
+      type: led-85ff00
+    - t: ▽
+      type: trans led-85ff00
+    - t: ␣
+      type: led-85ff00
+    - t: ⏎ Enter
+      type: led-85ff00
+    - t: ADJUST
+      s: TT · layer
+      type: lk-adjust led-85ff00
+    - t: Ctrl
+      s: '2×: Mission Ctrl'
+      type: led-85ff00
+  RAISE:
+  - - t: º
+      type: led-8000ff
+    - t: '!'
+      type: led-80ff00
+    - t: '@'
+      type: led-80ff00
+    - t: '#'
+      type: led-80ff00
+    - t: $
+      type: led-80ff00
+    - t: '%'
+      type: led-80ff00
+    - t: ^
+      type: led-80ff00
+    - t: '&'
+      type: led-80ff00
+    - t: '*'
+      type: led-80ff00
+    - t: (
+      type: led-80ff00
+    - t: )
+      type: led-80ff00
+    - t: ⌫
+      type: led-8000ff
+  - - t: Tab
+      type: led-8000ff
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: '-'
+      type: led-80ff00
+    - t: '='
+      type: led-80ff00
+    - t: '['
+      type: led-80ff00
+    - t: ']'
+      type: led-80ff00
+    - t: \
+      type: led-80ff00
+    - t: '`'
+      type: led-8000ff
+  - - t: Shift
+      type: led-8000ff
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: ''
+      type: led-80ff00
+    - t: _
+      type: led-80ff00
+    - t: +
+      type: led-80ff00
+    - t: '{'
+      type: led-80ff00
+    - t: '}'
+      type: led-80ff00
+    - t: '|'
+      type: led-80ff00
+    - t: '~'
+      type: led-8000ff
+  - - t: Cmd
+      type: led-8000ff
+    - t: ADJUST
+      s: TT · layer
+      type: lk-adjust led-8000ff
+    - t: ␣
+      type: led-8000ff
+    - t: ⏎ Enter
+      type: led-8000ff
+    - t: ▽
+      type: trans led-8000ff
+    - t: Ctrl
+      s: '2×: Mission Ctrl'
+      type: led-8000ff
+  ADJUST:
+  - - t: RGB on/off
+      type: led-fffb00
+    - t: COLEMAK
+      s: TG · layer
+      type: lk-colemak led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: '7'
+      type: led-0004ff
+    - t: '8'
+      type: led-0004ff
+    - t: '9'
+      type: led-0004ff
+    - t: '-'
+      type: led-0004ff
+    - t: /
+      type: led-0004ff
+    - t: ⌫
+      type: led-fffb00
+  - - t: RGB mode
+      type: led-fffb00
+    - t: Hue +
+      type: led-0004ff
+    - t: Sat +
+      type: led-0004ff
+    - t: Bright +
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: '4'
+      type: led-0004ff
+    - t: '5'
+      type: led-0004ff
+    - t: '6'
+      type: led-0004ff
+    - t: +
+      type: led-0004ff
+    - t: '*'
+      type: led-0004ff
+    - t: ''
+      type: led-fffb00
+  - - t: Hue −
+      type: led-fffb00
+    - t: Sat −
+      type: led-0004ff
+    - t: Bright −
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: ''
+      type: led-0004ff
+    - t: '1'
+      type: led-0004ff
+    - t: '2'
+      type: led-0004ff
+    - t: '3'
+      type: led-0004ff
+    - t: '='
+      type: led-0004ff
+    - t: ·
+      type: led-0004ff
+    - t: ''
+      type: led-fffb00
+  - - t: Cmd
+      type: led-fffb00
+    - t: ▽
+      type: trans led-fffb00
+    - t: ␣
+      type: led-fffb00
+    - t: ⏎ Enter
+      type: led-fffb00
+    - t: ▽
+      type: trans led-fffb00
+    - t: '0'
+      type: led-fffb00
+  COLEMAK:
+  - - t: Esc
+      s: '2×: Caps'
+      type: led-00ffff
+    - t: Q
+      type: led-ff0000
+    - t: W
+      type: led-ff0000
+    - t: F
+      type: led-ff0000
+    - t: P
+      type: led-ff0000
+    - t: G
+      type: led-ff0000
+    - t: J
+      type: led-ff0000
+    - t: L
+      type: led-ff0000
+    - t: U
+      type: led-ff0000
+    - t: Y
+      type: led-ff0000
+    - t: Ñ
+      type: led-ff0000
+    - t: ⌫
+      type: led-00ffff
+  - - t: Tab
+      type: led-00ffff
+    - t: A
+      type: led-ff0000
+    - t: R
+      type: led-ff0000
+    - t: S
+      type: led-ff0000
+    - t: T
+      type: led-ff0000
+    - t: D
+      type: led-ff0000
+    - t: H
+      type: led-ff0000
+    - t: N
+      type: led-ff0000
+    - t: E
+      type: led-ff0000
+    - t: I
+      type: led-ff0000
+    - t: O
+      type: led-ff0000
+    - t: ´
+      type: led-00ffff
+  - - t: Shift
+      type: led-00ffff
+    - t: Z
+      type: led-ff0000
+    - t: X
+      type: led-ff0000
+    - t: C
+      type: led-ff0000
+    - t: V
+      type: led-ff0000
+    - t: B
+      type: led-ff0000
+    - t: K
+      type: led-ff0000
+    - t: M
+      type: led-ff0000
+    - t: ','
+      type: led-ff0000
+    - t: .
+      type: led-ff0000
+    - t: '-'
+      type: led-ff0000
+    - t: Esc
+      type: led-00ffff
+  - - t: Cmd
+      type: led-00ffff
+    - t: LOWER
+      s: TT · layer
+      type: lk-lower led-00ffff
+    - t: ␣
+      type: led-00ffff
+    - t: ⏎ Enter
+      type: led-00ffff
+    - t: RAISE
+      s: TT · layer
+      type: lk-raise led-00ffff
+    - t: Ctrl
+      s: '2×: Mission Ctrl'
+      type: led-00ffff
