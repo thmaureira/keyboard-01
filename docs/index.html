@@ -1,0 +1,923 @@
+<meta charset="utf-8">
+<title>Corne Dojo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: EVA-01 title card header over a hazard stripe, then the board stage framed like a hangar monitor
+   (corner brackets, mint scaffolding grid). Keys keep the real LED colors. Single dark look by choice. */
+:root {
+  --bg: #120d1a;             /* hangar at night, violet-black */
+  --panel: #1c1428;
+  --cap: #271c38;
+  --keycap: #cdb9ef;         /* lilac keycaps */
+  --keycap-ink: #241a33;
+  --cap-edge: #3b2b55;
+  --fg: #ece6f5;
+  --muted: #9a8fb0;
+  --eva-purple: #7b45c4;     /* Unit-01 armor */
+  --eva-green: #9be22d;      /* armor accents */
+  --eva-orange: #f2a33a;     /* chest plate */
+  --mint: #9fd8c4;           /* poster backdrop, used for linework */
+  --nerv-red: #d93a3a;
+  --under: #9aa4bd;          /* underglow color of the shown layer */
+  --glow: #9aa4bd;           /* current layer LED color, set from JS */
+  --ok: #9be22d;
+  --bad: #ff5a5a;
+  --title: "Noto Serif JP", "Hiragino Mincho ProN", "Times New Roman", serif;
+  --display: "Barlow Condensed", "Avenir Next Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --u: min(58px, calc((100vw - 40px) / 13.7));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  background-image: linear-gradient(color-mix(in srgb, var(--mint) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--mint) 5%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px; }
+.wrap { max-width: 900px; margin: 0 auto; padding-block: 28px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px; }
+.titlecard { flex: 1 1 260px; min-width: 0; }
+.kicker { margin: 0 0 6px; font-family: var(--display); font-weight: 600; letter-spacing: .28em; font-size: 12px; color: var(--mint); }
+h1 { font-family: var(--title); font-weight: 900; font-size: clamp(44px, 9vw, 72px); line-height: .82; margin: 0; letter-spacing: -.01em;
+  transform: scaleX(.86); transform-origin: left bottom; }
+h1 span { color: var(--eva-green); }
+.plate { display: grid; grid-template-rows: auto auto 1fr; justify-items: center; background: #f4f1ea; color: var(--eva-purple);
+  padding: 6px 12px 2px; border-radius: 2px; line-height: 1; }
+.plate small { font-size: 10px; color: #3a2a55; letter-spacing: .1em; }
+.plate span { font-family: var(--title); font-size: 10px; letter-spacing: .5em; color: #3a2a55; margin-top: 3px; }
+.plate b { font-family: var(--title); font-weight: 900; font-size: 48px; transform: scaleX(.8); }
+.hazard { height: 8px; margin-top: -8px; background: repeating-linear-gradient(-45deg, var(--eva-orange) 0 10px, transparent 10px 20px); opacity: .9; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 15px; text-transform: uppercase; letter-spacing: .16em; color: var(--mint); margin: 0; }
+.modes { display: flex; gap: 4px; background: var(--panel); padding: 4px; border-radius: 3px; border: 1px solid var(--cap-edge); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
+.modes button { background: none; border: 0; padding: 5px 16px; border-radius: 2px; color: var(--muted); font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: .08em; text-transform: uppercase; }
+.modes button[aria-pressed="true"] { background: var(--eva-green); color: #1a1226; }
+.controls { display: grid; gap: 8px; justify-items: end; }
+.hotkey { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 17px; color: var(--eva-orange); }
+.hotkey kbd { font-family: var(--display); font-size: 18px; font-weight: 700; padding: 2px 10px; border-color: var(--eva-orange); color: var(--eva-orange); }
+.hotkey i { font-style: normal; color: var(--muted); }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--cap-edge); border-radius: 3px; padding: 4px 14px 4px 10px; font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: .1em; }
+.tab i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.tab[aria-selected="true"] { border-color: var(--c); background: color-mix(in srgb, var(--c) 16%, var(--panel)); }
+
+.stage { position: relative; border-radius: 4px; padding: 22px 12px 18px; background: var(--panel); overflow-x: auto;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--glow) 35%, transparent), 0 10px 60px -24px color-mix(in srgb, var(--under) 35%, transparent);
+  transition: box-shadow .3s; }
+.stage::before, .stage::after { content: ""; position: absolute; width: 22px; height: 22px; border: 2px solid var(--mint); opacity: .7; pointer-events: none; }
+.stage::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
+.stage::after { bottom: 6px; right: 6px; border-left: 0; border-top: 0; }
+.layer-info { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 14px 6px 0; font-size: 13.5px; color: var(--muted); }
+.layer-info b { color: var(--fg); font-weight: 600; }
+.board { position: relative; width: calc(var(--u) * 13.6); height: calc(var(--u) * 5.15); margin: 0 auto; }
+.key { position: absolute; width: calc(var(--u) * .94); height: calc(var(--u) * .94); border-radius: calc(var(--u) * .16);
+  background: var(--keycap); color: var(--keycap-ink); border: 1px solid color-mix(in srgb, var(--keycap) 70%, #000); display: grid; place-items: center; text-align: center;
+  font-family: var(--mono); font-size: calc(var(--u) * .27); line-height: 1.05; padding: 2px; transition: background .15s, box-shadow .15s, border-color .15s; }
+.key .t { font-weight: 600; overflow-wrap: anywhere; }
+.key .t.long { font-size: calc(var(--u) * .19); font-family: var(--body); font-weight: 500; }
+.key .s { position: absolute; top: 3px; left: 0; right: 0; font-size: calc(var(--u) * .15); color: #5b4a78; font-family: var(--body); }
+.key.empty { background: color-mix(in srgb, var(--keycap) 55%, var(--bg)); }
+.key.trans { color: #6f5f8c; }
+.key .kana { position: absolute; right: calc(var(--u) * .08); bottom: calc(var(--u) * .04); font-family: var(--title); font-weight: 900; font-size: calc(var(--u) * .2); color: #3a2a55; }
+/* Per-key LED color of the layer (tools/led_colors.py) */
+.key.led { border-color: color-mix(in srgb, var(--kc) 65%, var(--keycap)); box-shadow: 0 0 calc(var(--u) * .2) 0 color-mix(in srgb, var(--kc) 40%, transparent); }
+.key.layer { border: calc(var(--u) * .05) solid var(--lc); font-family: var(--display); font-weight: 700; }
+.key.layer .t { font-size: calc(var(--u) * .2); overflow-wrap: normal; white-space: nowrap; }
+.key.layer .t.long { font-family: var(--display); font-weight: 700; font-size: calc(var(--u) * .17); }
+/* Help: only Esc and Cmd breathe (in the help color); layer keys stay still. */
+body.helping .key.layer { animation: none; }
+.key.breathe { animation: hbreath 1.6s ease-in-out infinite; }
+@keyframes hbreath { 0%, 100% { box-shadow: 0 0 0 2px var(--hc); } 50% { box-shadow: 0 0 0 4px var(--hc), 0 0 calc(var(--u) * .5) var(--hc); } }
+/* Keys that change layer breathe in the color of the layer they open. */
+.key.layer { animation: breath 2.4s ease-in-out infinite; }
+@keyframes breath { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 calc(var(--u) * .35) calc(var(--u) * .06) var(--lc); } }
+.key.tall { height: calc(var(--u) * 1.4); }
+.key.lit { background: #fff; border-color: var(--glow); box-shadow: 0 0 0 3px var(--glow), 0 0 24px var(--glow); }
+.key.hold { border-color: var(--hc); box-shadow: 0 0 0 3px var(--hc), 0 0 20px var(--hc); }
+.key.goal { animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 3px var(--glow), 0 0 24px var(--glow); } }
+/* FULL: all layers on one keycap, Miryoku style. Center = QWERTY, corners = LOWER / RAISE / ADJUST. */
+.key .c { position: absolute; font-family: var(--body); font-weight: 600; font-size: calc(var(--u) * .2); line-height: 1; max-width: 60%; overflow: hidden; white-space: nowrap; }
+.key .c.lo { top: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #5b17b0; }
+.key .c.ra { top: calc(var(--u) * .07); right: calc(var(--u) * .08); color: #2d6b00; }
+.key .c.ad { bottom: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #1f3ac0; }
+.key .c.td { top: calc(var(--u) * -.13); left: 50%; transform: translateX(-50%); max-width: none; background: var(--eva-orange); color: #1a1226; border-radius: 99px; padding: 1px calc(var(--u) * .08); font-size: calc(var(--u) * .16); }
+.key.full .t { font-size: calc(var(--u) * .22); }
+.key.full .t.long { font-size: calc(var(--u) * .15); }
+.info-k { font-weight: 600; }
+/* 3D stack: one plate per layer (LOWER under QWERTY, the rest above), see-through where the layer has ▽. */
+.stack { background: var(--panel); border-radius: 4px; border-top: 3px solid var(--eva-orange); padding: 18px; display: grid; gap: 12px; }
+.stack-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; align-items: center; }
+@media (max-width: 640px) { .stack-grid { grid-template-columns: minmax(0, 1fr); } }
+.stack3d { --p: min(17px, calc((100vw - 80px) / 22)); height: calc(var(--p) * 25); perspective: 1400px; display: grid; place-items: center; overflow: hidden; }
+.tower { position: relative; width: calc(var(--p) * 13.6); height: calc(var(--p) * 5.15); transform-style: preserve-3d; transform: translateY(calc(var(--p) * 7.5)) rotateX(60deg) rotateZ(-32deg); }
+.plate3d { position: absolute; inset: calc(var(--p) * -.35); border-radius: calc(var(--p) * .5); transform-style: preserve-3d;
+  transform: translateZ(calc(var(--z) * var(--p) * 3.6)); background: color-mix(in srgb, var(--c) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); transition: transform .35s, opacity .35s, box-shadow .35s; cursor: pointer; }
+.plate3d i { position: absolute; width: calc(var(--p) * .86); height: calc(var(--p) * .86); border-radius: calc(var(--p) * .18);
+  background: color-mix(in srgb, var(--c) 70%, var(--keycap)); margin: calc(var(--p) * .35); }
+.plate3d i.tall { height: calc(var(--p) * 1.3); }
+.plate3d i.hole { background: none; border: 1px dashed color-mix(in srgb, var(--c) 60%, transparent); }
+.plate3d i.lk { background: var(--keycap); box-shadow: 0 0 0 2px var(--lc); }
+.plate3d b { position: absolute; left: calc(100% + var(--p) * .4); bottom: 0; font-family: var(--display); font-weight: 700; font-size: calc(var(--p) * .9); letter-spacing: .1em; color: var(--c); white-space: nowrap; }
+/* Dim by color, not opacity: opacity flattens preserve-3d in Safari/WebKit (the Hammerspoon window). */
+.plate3d { --c: var(--c0); }
+.tower.focus .plate3d:not(.on) { --c: color-mix(in srgb, var(--c0) 22%, #2a2238); }
+/* Plates above the selected one move up and the rest down, so no key covers the selected plate. */
+.tower.focus .plate3d { transform: translateZ(calc(var(--z) * var(--p) * 3.6 - var(--p) * 2)); }
+.tower.focus .plate3d.above { transform: translateZ(calc(var(--z) * var(--p) * 3.6 + var(--p) * 2.5)); }
+.tower.focus .plate3d.on { opacity: 1; transform: translateZ(calc(var(--z) * var(--p) * 3.6 - var(--p) * .8)); box-shadow: 0 0 calc(var(--p) * 1.4) color-mix(in srgb, var(--c) 45%, transparent); }
+.stack-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 13.5px; color: var(--muted); }
+.stack-list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: baseline; padding: 6px 10px; border-left: 3px solid var(--c); border-radius: 2px; cursor: pointer; }
+.stack-list li.on { background: color-mix(in srgb, var(--c) 12%, transparent); color: var(--fg); }
+.stack-list li b { font-family: var(--display); font-weight: 700; letter-spacing: .1em; color: var(--c); }
+/* Large overlay: the 3D stack sits in a column right of the board (plates only, no list). */
+body.overlay.mini .stack { display: none !important; }
+body.overlay:not(.mini) .wrap { grid-template-columns: minmax(0, 1fr) 340px; }
+body.overlay:not(.mini) .wrap > header, body.overlay:not(.mini) .wrap > .hazard, body.overlay:not(.mini) .wrap > .ovbar { grid-column: 1 / -1; }
+body.overlay .stack { padding: 12px; gap: 6px; align-content: start; }
+body.overlay .stack-grid { grid-template-columns: minmax(0, 1fr); }
+body.overlay .stack3d { --p: 13px; height: calc(var(--p) * 22); }
+body.overlay .tower { transform: translate(calc(var(--p) * -2.8), calc(var(--p) * 6.4)) rotateX(60deg) rotateZ(-32deg); }
+body.overlay .stage { align-self: start; }
+.ovhow { display: none; margin: 0; padding: 0; list-style: none; gap: 6px; font-size: 12px; line-height: 1.35; color: var(--muted); }
+.ovhow b { font-family: var(--display); font-weight: 700; letter-spacing: .08em; color: var(--c); }
+.ovhow span { display: block; }
+body.overlay .ovhow { display: grid; }
+body.overlay .stack-list, body.overlay .stack .small { display: none; }
+.legend { margin: 12px 6px 0; font-size: 12.5px; color: var(--muted); }
+
+.focus-note { position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--bg) 70%, transparent); border-radius: 4px; font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: .12em; text-transform: uppercase; border: 0; width: 100%; }
+
+.practice { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 640px) { .practice { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border-radius: 4px; border-top: 3px solid var(--eva-purple); padding: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.pools { display: flex; flex-wrap: wrap; gap: 6px; }
+.pools button { background: var(--cap); border: 1px solid var(--cap-edge); border-radius: 8px; padding: 4px 10px; font-size: 13px; }
+.pools button[aria-pressed="true"] { border-color: var(--glow); color: var(--fg); background: color-mix(in srgb, var(--glow) 18%, var(--cap)); }
+.target-row { display: flex; align-items: center; gap: 18px; }
+.target { font-family: var(--mono); font-weight: 600; font-size: 64px; line-height: 1; min-width: 1.4em; text-align: center; padding: 10px 14px; border-radius: 14px; background: var(--cap); border: 1px solid var(--cap-edge); }
+.target.ok { border-color: var(--ok); }
+.target.bad { border-color: var(--bad); animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.hint { color: var(--muted); font-size: 14px; min-height: 3em; }
+.hint b { color: var(--fg); }
+.score { display: flex; gap: 18px; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); }
+.score b { color: var(--fg); font-size: 17px; display: block; font-family: var(--display); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 500; color: var(--muted); padding: 4px 6px; border-bottom: 1px solid var(--cap-edge); }
+td { padding: 5px 6px; border-bottom: 1px solid color-mix(in srgb, var(--cap-edge) 50%, transparent); }
+td.sym { font-family: var(--mono); font-weight: 600; font-size: 15px; }
+.chip { display: inline-block; padding: 0 7px; border-radius: 99px; font-size: 11.5px; border: 1px solid var(--c); color: var(--c); font-family: var(--display); }
+.empty-stats { color: var(--muted); font-size: 13px; }
+.reset { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 12.5px; justify-self: start; padding: 0; }
+.explore-note { color: var(--muted); font-size: 14px; max-width: 65ch; }
+.help { background: var(--panel); border-radius: 4px; border-top: 3px solid var(--eva-green); padding: 18px; display: grid; gap: 14px; }
+.help-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; }
+@media (max-width: 640px) { .help-grid { grid-template-columns: minmax(0, 1fr); } }
+.help ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); }
+.help ol b { color: var(--fg); font-weight: 600; }
+kbd { font-family: var(--mono); font-size: 13px; background: var(--cap); border: 1px solid var(--cap-edge); border-bottom-width: 2px; border-radius: 6px; padding: 1px 7px; color: var(--fg); }
+.shortcut { display: flex; align-items: center; gap: 6px; font-size: 15px; }
+.code { min-width: 0; }
+.code pre { margin: 0; background: var(--bg); border: 1px solid var(--cap-edge); border-radius: 10px; padding: 12px 14px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; overflow-x: auto; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { background: var(--cap); border: 1px solid var(--cap-edge); border-radius: 8px; padding: 6px 12px; font-size: 13px; text-decoration: none; color: var(--fg); }
+.btn:hover { border-color: var(--glow); }
+.small { font-size: 12.5px; color: var(--muted); margin: 0; }
+/* Overlay mode (#overlay): the same page inside the Hammerspoon window opened with ⌘ + Esc. */
+.ovbar { display: none; }
+/* Outside the overlay the bar only carries the layer tabs. */
+body:not(.overlay) .ovbar { display: flex; }
+body:not(.overlay) .ovbar .ovbtn { display: none; }
+body.overlay { --u: min(84px, calc((100vw - 96px - 350px) / 13.7)); background-size: 48px 48px; overflow: hidden; }
+body.overlay .wrap { max-width: none; padding-block: 12px; gap: 10px; }
+body.overlay .stage { overflow: hidden; }
+body.overlay:not(.cover) header, body.overlay.mini header,
+body.overlay .modes, body.overlay.cover .ovtitle, body.overlay #explore-note, body.overlay .practice, body.overlay .help,
+body.overlay .legend, body.overlay .focus-note { display: none !important; }
+body.overlay .ovbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+body.overlay .ovbar .tabs { flex: 1 1 auto; }
+/* Without the header the hazard stripe sits on top, like the cover's. */
+body.overlay:not(.cover) .hazard, body.overlay.mini .hazard { margin-top: 0; }
+/* Mini: stripe between the layer tabs and the board. */
+body.overlay.mini .wrap > * { order: 2; }
+body.overlay.mini .wrap > .ovbar { order: 0; }
+body.overlay.mini .wrap > .hazard { order: 1; }
+body.overlay.mini .hazard { height: 5px; background-size: auto; background: repeating-linear-gradient(-45deg, var(--eva-orange) 0 6px, transparent 6px 12px); }
+.ovtitle { font-family: var(--title); font-weight: 900; font-size: 22px; transform: scaleX(.86); transform-origin: left; margin-right: 6px; }
+.ovtitle span { color: var(--eva-green); }
+/* The overlay always shows the title card header; the mini view hides it. */
+/* In the overlay the header reads キボド 01 / KEYBOARD-01, like the mini badge, instead of CORNE DOJO. */
+.ovh1 { display: none; margin: 0; font-family: var(--title); font-weight: 900; font-size: 56px; line-height: .95; color: var(--fg); }
+.ovh1 small { display: block; font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: .4em; color: var(--mint); margin-top: 6px; }
+body.overlay h1, body.overlay .kicker { display: none; }
+body.overlay .ovh1 { display: block; }
+/* KB-01 badge in the empty corner left of the thumb keys, mini view only. */
+.unit { display: none; position: absolute; left: calc(var(--u) * .1); top: calc(var(--u) * 3.55); background: #f4f1ea; color: var(--eva-purple);
+  border-radius: 2px; padding: calc(var(--u) * .08) calc(var(--u) * .16); font-family: var(--title); font-weight: 900; font-size: calc(var(--u) * .6); line-height: 1; text-align: center; }
+.unit-r { left: auto; right: calc(var(--u) * .1); }
+.unit small { display: block; font-size: calc(var(--u) * .17); letter-spacing: .2em; color: #3a2a55; margin-top: calc(var(--u) * .06); }
+body.overlay.mini .unit { display: block; }
+.ovbtn { background: var(--panel); border: 1px solid var(--cap-edge); border-radius: 3px; padding: 4px 14px; font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ovbtn[aria-pressed="true"] { background: var(--eva-orange); border-color: var(--eva-orange); color: #1a1226; }
+/* Mini: pinned thumbnail in a screen corner (window made translucent by Hammerspoon). */
+body.overlay.mini { --u: calc((100vw - 44px) / 13.7); background-image: none; cursor: grab; user-select: none; }
+body.overlay.mini .wrap { padding: 6px 8px; gap: 6px; }
+body.overlay.mini .ovbar { gap: 5px; flex-wrap: nowrap; }
+body.overlay.mini .ovtitle, body.overlay.mini .layer-info span + span, body.overlay.mini .stage::before, body.overlay.mini .stage::after { display: none; }
+body.overlay.mini .tabs { gap: 3px; flex-wrap: nowrap; min-width: 0; }
+body.overlay.mini .tab { font-size: 11px; padding: 1px 6px; gap: 4px; letter-spacing: .04em; }
+body.overlay.mini .tab i { width: 6px; height: 6px; }
+body.overlay.mini .ovbtn { font-size: 11px; padding: 1px 6px; letter-spacing: .04em; }
+body.overlay.mini .stage { padding: 6px 4px 8px; }
+body.overlay .layer-info { display: none; }
+body.overlay.mini .key .s { display: none; }
+@media (prefers-reduced-motion: reduce) { .key.goal, .key.layer, .key.breathe, .target.bad { animation: none; } * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="titlecard">
+      <p class="kicker">KEYBOARD-01 · キボド 01</p>
+      <h1>CORNE <span>DOJO</span></h1>
+      <p class="ovh1" aria-hidden="true">キボド 01<small>KEYBOARD-01</small></p>
+    </div>
+    <div class="plate" aria-hidden="true"><small>キボド 01</small><span>KEYBOARD</span><b>01</b></div>
+    <div class="controls">
+      <div class="modes" role="group" aria-label="Modo">
+        <button id="m-explore" aria-pressed="true">Explore</button>
+        <button id="m-practice" aria-pressed="false">Practice</button>
+        <button id="m-help" aria-pressed="false">Help</button>
+      </div>
+      <div class="hotkey">On-screen map: hold <kbd>⌘</kbd><i>+</i><kbd>Esc</kbd></div>
+    </div>
+  </header>
+  <div class="hazard" aria-hidden="true"></div>
+
+  <div class="ovbar">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <button class="ovbtn" id="mini" aria-pressed="false" title="Pinned thumbnail in a corner">Mini</button>
+    <button class="ovbtn" id="pin" aria-pressed="false" title="Keep the map open after releasing ⌘ + Esc">Pin</button>
+    <button class="ovbtn" id="close" title="Esc">Close</button>
+  </div>
+
+  <section class="stage" id="stage">
+    <div class="board" id="board" aria-label="Corne keyboard"><div class="unit" aria-hidden="true">KB-01<small>キボド 01</small></div><div class="unit unit-r" aria-hidden="true">KB-01<small>キボド 01</small></div></div>
+    <div class="layer-info" id="info"></div>
+    <p class="legend">Colored border: switches to that layer (hold = while held, several taps = locks it). <b>2×</b> = double tap. ▽ = same key as the base layer. Symbols follow macOS with the Spanish ISO layout.</p>
+    <button class="focus-note" id="focus" hidden>Click here and type with your Corne</button>
+  </section>
+
+  <p class="explore-note" id="explore-note">Type with your Corne: the key you press lights up and the view switches to its layer, in the color the LEDs use. Layer keys never reach the computer, so the layer is inferred from the character you typed.</p>
+
+  <section class="stack" id="stack" aria-labelledby="stack-h">
+    <h2 id="stack-h">How the layers stack</h2>
+    <div class="stack-grid">
+      <div class="stack3d" aria-hidden="true"><div class="tower" id="tower"></div></div>
+      <ol class="stack-list" id="stack-list"></ol>
+      <ul class="ovhow">
+        <li><b style="--c:#a855ff">LOWER</b> / <b style="--c:#8cff1a">RAISE</b> <span>Hold: active while held. Several taps in a row: locks it; another tap releases it.</span></li>
+        <li><b style="--c:#4d6bff">ADJUST</b> <span>Hold LOWER and RAISE together.</span></li>
+        <li><b style="--c:#ff3b3b">COLEMAK</b> <span>COLEMAK key in ADJUST: locks and covers everything. To exit: tap reset or unplug.</span></li>
+        <li><b style="--c:var(--eva-orange)">2×</b> <span>Double tap: Esc → Caps, A → @, Ctrl → Mission Control.</span></li>
+      </ul>
+    </div>
+    <p class="small">LOWER goes down and RAISE goes up from QWERTY; ADJUST is holding both. Where a layer defines no key (▽, drawn as a hole) the QWERTY key is used. COLEMAK sits on top and covers every key, layer keys included: once locked, the thumbs cannot get you out.</p>
+  </section>
+
+  <section class="practice" id="practice" hidden>
+    <div class="card">
+      <h2>Type this character</h2>
+      <div class="pools" id="pools" role="group" aria-label="What to practice"></div>
+      <div class="target-row">
+        <div class="target" id="target" aria-live="polite">@</div>
+        <div class="hint" id="hint"></div>
+      </div>
+      <div class="score">
+        <div><b id="sc-streak">0</b>streak</div>
+        <div><b id="sc-acc">–</b>accuracy</div>
+        <div><b id="sc-ms">–</b>avg time</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Your hardest keys</h2>
+      <div id="weak"></div>
+      <button class="reset" id="reset">Reset my progress</button>
+    </div>
+  </section>
+  <section class="help" id="help" aria-labelledby="help-h" hidden>
+    <h2 id="help-h">On-screen help on the Mac</h2>
+    <div class="help-grid">
+      <div style="display:grid;gap:12px;align-content:start">
+        <div class="shortcut">Hold <kbd>⌘</kbd><kbd>Esc</kbd></div>
+        <ol>
+          <li><b>Hold the shortcut</b> and the layer map appears over any app. Release it and it goes away.</li>
+          <li>On the Corne: <b>Cmd</b> with the left thumb and <b>Esc</b> with the left pinky.</li>
+          <li><b>Click KB-01</b> in the menu bar to pin it; click again to hide it.</li>
+        </ol>
+        <div class="btns"><a class="btn" href="hammerspoon://corne-toggle">Show / hide the map</a></div>
+        <p class="small">The button needs Hammerspoon running. If nothing happens, use the shortcut or KB-01 in the menu bar.</p>
+      </div>
+      <div class="code">
+        <p class="small" style="margin-bottom:8px">Install on another Mac (from the repo folder):</p>
+        <pre id="install">brew install --cask hammerspoon
+mkdir -p ~/.hammerspoon/corne
+cp corne/hammerspoon/corne-overlay.lua \
+   corne/corne-dojo.html ~/.hammerspoon/corne/
+cat &gt; ~/.hammerspoon/init.lua &lt;&lt;'EOF'
+require("hs.ipc")
+package.path = hs.configdir .. "/corne/?.lua;" .. package.path
+corneOverlay = require("corne-overlay")
+EOF
+open -a Hammerspoon</pre>
+        <div class="btns" style="margin-top:8px"><button class="btn" id="copy">Copy commands</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const KEYMAP = {"QWERTY": ["TD(0)", "KC_Q", "KC_W", "KC_E", "KC_R", "KC_T", "KC_Y", "KC_U", "KC_I", "KC_O", "KC_P", "KC_BSPC", "KC_TAB", "TD(1)", "KC_S", "KC_D", "KC_F", "KC_G", "KC_H", "KC_J", "KC_K", "KC_L", "KC_SCLN", "KC_QUOT", "KC_LSFT", "KC_Z", "KC_X", "KC_C", "KC_V", "KC_B", "KC_N", "KC_M", "KC_COMM", "KC_DOT", "KC_SLSH", "KC_RALT", "KC_LGUI", "TT(1)", "KC_SPC", "KC_ENT", "TT(2)", "TD(2)"], "LOWER": ["TD(0)", "KC_1", "KC_2", "KC_3", "KC_4", "KC_5", "KC_6", "KC_7", "KC_8", "KC_9", "KC_0", "KC_BSPC", "KC_TAB", "KC_WH_R", "KC_WH_D", "KC_BTN2", "KC_MS_U", "KC_BTN1", "KC_MCTL", "KC_UP", "KC_MRWD", "KC_MFFD", "KC_MUTE", "KC_MPLY", "KC_LSFT", "KC_WH_L", "KC_WH_U", "KC_MS_L", "KC_MS_D", "KC_MS_R", "KC_LEFT", "KC_DOWN", "KC_RGHT", "KC_MCTL", "KC_LPAD", "KC_PSCR", "KC_LGUI", "KC_TRNS", "KC_SPC", "KC_ENT", "TT(3)", "TD(2)"], "RAISE": ["KC_GRV", "LSFT(KC_1)", "RALT(KC_2)", "RALT(KC_3)", "LSFT(KC_4)", "LSFT(KC_5)", "LSFT(KC_LBRC)", "LSFT(KC_6)", "LSFT(KC_RBRC)", "LSFT(KC_8)", "LSFT(KC_9)", "KC_BSPC", "KC_TAB", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_SLSH", "LSFT(KC_0)", "RALT(KC_LBRC)", "RALT(KC_RBRC)", "RALT(KC_GRV)", "KC_LBRC", "KC_LSFT", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "LSFT(KC_SLSH)", "KC_RBRC", "RALT(KC_QUOT)", "RALT(KC_NUHS)", "RALT(KC_1)", "RALT(KC_4)", "KC_LGUI", "TT(3)", "KC_SPC", "KC_ENT", "KC_TRNS", "TD(2)"], "ADJUST": ["RGB_TOG", "TG(4)", "KC_NO", "KC_NO", "KC_NO", "KC_NO", "KC_P7", "KC_P8", "KC_P9", "KC_SLSH", "LSFT(KC_7)", "KC_BSPC", "RGB_MOD", "RGB_HUI", "RGB_SAI", "RGB_VAI", "KC_NO", "KC_NO", "KC_P4", "KC_P5", "KC_P6", "KC_RBRC", "LSFT(KC_RBRC)", "KC_NO", "RGB_HUD", "RGB_SAD", "RGB_VAD", "KC_NO", "KC_NO", "KC_NO", "KC_P1", "KC_P2", "KC_P3", "LSFT(KC_0)", "LSFT(KC_3)", "KC_NO", "KC_LGUI", "KC_TRNS", "KC_SPC", "KC_ENT", "KC_TRNS", "KC_P0"], "COLEMAK": ["TD(0)", "KC_Q", "KC_W", "KC_F", "KC_P", "KC_G", "KC_J", "KC_L", "KC_U", "KC_Y", "KC_SCLN", "KC_BSPC", "KC_TAB", "KC_A", "KC_R", "KC_S", "KC_T", "KC_D", "KC_H", "KC_N", "KC_E", "KC_I", "KC_O", "KC_QUOT", "KC_LSFT", "KC_Z", "KC_X", "KC_C", "KC_V", "KC_B", "KC_K", "KC_M", "KC_COMM", "KC_DOT", "KC_SLSH", "KC_ESC", "KC_LGUI", "TT(1)", "KC_SPC", "KC_ENT", "TT(2)", "TD(2)"]};
+const LED = {
+ "keys": {
+  "QWERTY": null,
+  "LOWER": [
+   "#85ff00",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#85ff00",
+   "#85ff00",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#85ff00",
+   "#85ff00",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#7a00ff",
+   "#85ff00",
+   "#85ff00",
+   "#85ff00",
+   "#85ff00",
+   "#85ff00",
+   "#85ff00",
+   "#85ff00"
+  ],
+  "RAISE": [
+   "#8000ff",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#8000ff",
+   "#8000ff",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#8000ff",
+   "#8000ff",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#80ff00",
+   "#8000ff",
+   "#8000ff",
+   "#8000ff",
+   "#8000ff",
+   "#8000ff",
+   "#8000ff",
+   "#8000ff"
+  ],
+  "ADJUST": [
+   "#fffb00",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#fffb00",
+   "#fffb00",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#fffb00",
+   "#fffb00",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#0004ff",
+   "#fffb00",
+   "#fffb00",
+   "#fffb00",
+   "#fffb00",
+   "#fffb00",
+   "#fffb00",
+   "#fffb00"
+  ],
+  "COLEMAK": [
+   "#00ffff",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#00ffff",
+   "#00ffff",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#00ffff",
+   "#00ffff",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#ff0000",
+   "#00ffff",
+   "#00ffff",
+   "#00ffff",
+   "#00ffff",
+   "#00ffff",
+   "#00ffff",
+   "#00ffff"
+  ]
+ },
+ "underglow": {
+  "QWERTY": null,
+  "LOWER": "#85ff00",
+  "RAISE": "#8000ff",
+  "ADJUST": "#fffb00",
+  "COLEMAK": "#00ffff"
+ }
+}, LEDS = LED.keys;
+const ORDER = ["QWERTY", "LOWER", "RAISE", "ADJUST", "COLEMAK"];
+const TABS = ["FULL", "QWERTY", "LOWER", "RAISE", "ADJUST", "COLEMAK"];
+// LED colors as set in the firmware's layer_state_set_user (HSV hue 191, 64, 170, 0). QWERTY keeps the normal RGB effect.
+const LAYERS = {
+  QWERTY:  { color: "#9aa4bd", led: "normal RGB effect", how: "Base layer" },
+  LOWER:   { color: "#a855ff", led: "purple", under: "green", how: "Hold the left middle thumb key" },
+  RAISE:   { color: "#8cff1a", led: "lime green", under: "purple", how: "Hold the right middle thumb key" },
+  ADJUST:  { color: "#4d6bff", led: "blue", under: "yellow", how: "From LOWER or RAISE, hold the middle thumb key on the other side" },
+  FULL:    { color: "#f2a33a", led: "", how: "" },
+  COLEMAK: { color: "#ff3b3b", led: "red", under: "cyan", how: "In ADJUST, the COLEMAK key (second from the top left) — it stays locked" },
+};
+const ES = { MINS: "'", EQL: "¡", LBRC: "`", RBRC: "+", NUHS: "ç", SCLN: "ñ", QUOT: "´", GRV: "º", COMM: ",", DOT: ".", SLSH: "-", NUBS: "<" };
+const ES_S = { 1: "!", 2: '"', 3: "·", 4: "$", 5: "%", 6: "&", 7: "/", 8: "(", 9: ")", 0: "=", MINS: "?", EQL: "¿", LBRC: "^", RBRC: "*", NUHS: "Ç", QUOT: "¨", GRV: "ª", COMM: ";", DOT: ":", SLSH: "_", NUBS: ">" };
+const ES_A = { 1: "|", 2: "@", 3: "#", 4: "~", 5: "€", 6: "¬", E: "€", LBRC: "[", RBRC: "]", NUHS: "}", QUOT: "{", GRV: "\\" };
+// Katakana printed on the keycaps (JIS kana layout), shown on QWERTY.
+const KANA = Object.fromEntries([..."QWERTYUIOPASDFGHJKLZXCVBNM"].map((c, i) => [c, "タテイスカンナニラセチトシハキクマノリツサソヒコミモ"[i]]));
+const DEAD = new Set(["`", "´", "^", "¨"]);
+const CODE = { MINS: "Minus", EQL: "Equal", LBRC: "BracketLeft", RBRC: "BracketRight", NUHS: "Backslash", SCLN: "Semicolon", QUOT: "Quote", GRV: "Backquote", COMM: "Comma", DOT: "Period", SLSH: "Slash", NUBS: "IntlBackslash" };
+const NAMED = {
+  ENT: ["Enter", "Enter"], ESC: ["Esc", "Escape"], BSPC: ["⌫", "Backspace"], TAB: ["Tab", "Tab"], SPC: ["Space", " "], CAPS: ["Caps", "CapsLock"],
+  LCTL: ["Ctrl", "Control"], RCTL: ["Ctrl", "Control"], LSFT: ["Shift", "Shift"], RSFT: ["Shift", "Shift"], LALT: ["Opt", "Alt"], RALT: ["Opt / AltGr", "Alt"], LGUI: ["Cmd", "Meta"], RGUI: ["Cmd", "Meta"],
+  UP: ["↑", "ArrowUp"], DOWN: ["↓", "ArrowDown"], LEFT: ["←", "ArrowLeft"], RGHT: ["→", "ArrowRight"], PSCR: ["PrtSc", null],
+  MUTE: ["Mute", null], MPLY: ["Play", null], MFFD: ["▸▸", null, "FFwd"], MRWD: ["◂◂", null, "Rew"], MCTL: ["Mission Control", null], LPAD: ["Launch­pad", null],
+  MS_U: ["Mouse ↑", null], MS_D: ["Mouse ↓", null], MS_L: ["Mouse ←", null], MS_R: ["Mouse →", null], BTN1: ["Click", null], BTN2: ["Right click", null],
+  WH_U: ["Wheel ↑", null], WH_D: ["Wheel ↓", null], WH_L: ["Wheel ←", null], WH_R: ["Wheel →", null],
+};
+const TD = { 0: ["KC_ESC", "KC_CAPS"], 1: ["KC_A", "RALT(KC_2)"], 2: ["KC_RCTL", "KC_MCTL"] };
+const RGB = { RGB_TOG: "RGB on/off", RGB_MOD: "RGB mode", RGB_HUI: "Hue +", RGB_HUD: "Hue −", RGB_SAI: "Sat +", RGB_SAD: "Sat −", RGB_VAI: "Bright +", RGB_VAD: "Bright −" };
+
+function info(kc) {
+  let m;
+  if (kc === "KC_NO") return { t: "", cls: "empty" };
+  if (kc === "KC_TRNS") return { t: "▽", cls: "trans" };
+  if ((m = kc.match(/^TD\((\d)\)$/))) { const [a, b] = TD[m[1]]; const i = info(a); return { ...i, s: "2× " + info(b).t }; }
+  if ((m = kc.match(/^(TT|TG)\((\d)\)$/))) return { t: ORDER[m[2]], cls: "layer", layer: ORDER[m[2]], s: m[1] === "TG" ? "lock" : "" };
+  if (RGB[kc]) return { t: RGB[kc] };
+  if ((m = kc.match(/^(LSFT|RALT)\(KC_(\w+)\)$/))) {
+    const ch = (m[1] === "LSFT" ? ES_S : ES_A)[m[2]];
+    return { t: ch, out: DEAD.has(ch) ? null : ch, dead: DEAD.has(ch), code: codeOf(m[2]), mod: m[1] === "LSFT" ? "S" : "A" };
+  }
+  const k = kc.replace(/^KC_/, "");
+  if (/^[A-Z]$/.test(k)) return { t: k, out: k.toLowerCase(), code: "Key" + k, kana: KANA[k] };
+  if (/^\d$/.test(k)) return { t: k, out: k, code: "Digit" + k };
+  if ((m = k.match(/^P(\d)$/))) return { t: m[1], out: m[1], code: "Numpad" + m[1], s: "num" };
+  if (ES[k]) { const ch = ES[k]; return { t: ch === "ñ" ? "Ñ" : ch, out: DEAD.has(ch) ? null : ch, dead: DEAD.has(ch), code: CODE[k], mod: "" }; }
+  if (NAMED[k]) return { t: NAMED[k][0], out: NAMED[k][1], s: NAMED[k][2] };
+  return { t: k };
+}
+function codeOf(k) { return /^\d$/.test(k) ? "Digit" + k : /^[A-Z]$/.test(k) ? "Key" + k : CODE[k]; }
+
+// Physical Corne geometry in key units: column stagger, then the three rotated thumb keys per side.
+const STAGGER = [0.38, 0.38, 0.12, 0, 0.12, 0.25];
+const W = 13.6;
+function pos(i) {
+  if (i < 36) {
+    const r = Math.floor(i / 12), c = i % 12;
+    if (c < 6) return { x: c, y: r + STAGGER[c] };
+    const rc = c - 6;
+    return { x: W - 6 + rc, y: r + STAGGER[5 - rc] };
+  }
+  const t = i - 36;
+  const L = [{ x: 3.55, y: 3.45, r: 0 }, { x: 4.62, y: 3.55, r: 12 }, { x: 5.62, y: 3.6, r: 26, tall: 1 }];
+  if (t < 3) return L[t];
+  const p = L[5 - t];
+  return { x: W - 1 - p.x, y: p.y, r: -p.r, tall: p.tall };
+}
+
+const $ = (id) => document.getElementById(id);
+const board = $("board"), keys = [];
+for (let i = 0; i < 42; i++) {
+  const p = pos(i), el = document.createElement("div");
+  el.className = "key" + (p.tall ? " tall" : "");
+  el.style.left = `calc(var(--u) * ${p.x})`;
+  el.style.top = `calc(var(--u) * ${p.y})`;
+  if (p.r) el.style.transform = `rotate(${p.r}deg)`;
+  board.append(el);
+  keys.push(el);
+}
+
+const DATA = {};
+for (const name of ORDER) DATA[name] = KEYMAP[name].map(info);
+
+let current = "QWERTY";
+function showLayer(name) {
+  stackFocus(name);
+  if (name === "FULL") return showFull();
+  current = name;
+  const L = LAYERS[name];
+  document.documentElement.style.setProperty("--glow", L.color);
+  document.documentElement.style.setProperty("--under", LED.underglow[name] || L.color);
+  DATA[name].forEach((k, i) => {
+    const el = keys[i];
+    el.className = "key" + (pos(i).tall ? " tall" : "") + (k.cls ? " " + k.cls : "");
+    el.style.removeProperty("--lc");
+    const led = LEDS[name] && LEDS[name][i];
+    if (led) { el.classList.add("led"); el.style.setProperty("--kc", led); } else el.style.removeProperty("--kc");
+    if (k.layer) el.style.setProperty("--lc", LAYERS[k.layer].color);
+    const long = k.t && k.t.length > 3;
+    el.innerHTML = (k.s ? `<span class="s">${esc(k.s)}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>` + (name === "QWERTY" && k.kana ? `<span class="kana">${k.kana}</span>` : "");
+    el.title = KEYMAP[name][i];
+  });
+  $("info").innerHTML = `<span><b>${name}</b> · keys: ${L.led}${L.under ? " · underglow: " + L.under : ""}</span><span>${L.how}</span>`;
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.l === name));
+}
+// Short labels for the corner legends of the FULL view.
+const SHORT = { "Mission Control": "MCtl", "Launch\u00adpad": "LPad", "Right click": "RClk", "Opt / AltGr": "AltGr", "RGB on/off": "RGB", "RGB mode": "Mode", "Sat +": "Sat+", "Sat −": "Sat−", "Bright +": "Bri+", "Brillo −": "Bri−", "Tono +": "Tono+", "Tono −": "Tono−" };
+const short = (t) => SHORT[t] || t.replace(/^(Mouse|Wheel) /, (m, w) => w[0]);
+function showFull() {
+  current = "FULL";
+  document.documentElement.style.setProperty("--glow", LAYERS.FULL.color);
+  document.documentElement.style.setProperty("--under", LAYERS.FULL.color);
+  const corner = (name, cls, i) => {
+    const k = DATA[name][i];
+    return k.t && k.cls !== "trans" && k.cls !== "layer" && k.t !== DATA.QWERTY[i].t ? `<span class="c ${cls}">${esc(short(k.t))}</span>` : "";
+  };
+  DATA.QWERTY.forEach((k, i) => {
+    const el = keys[i];
+    el.className = "key full" + (pos(i).tall ? " tall" : "") + (k.cls === "layer" ? " layer" : "");
+    el.style.removeProperty("--kc");
+    if (k.layer) el.style.setProperty("--lc", LAYERS[k.layer].color); else el.style.removeProperty("--lc");
+    const long = k.t && k.t.length > 3;
+    el.innerHTML = corner("LOWER", "lo", i) + corner("RAISE", "ra", i) + corner("ADJUST", "ad", i) + (k.s && k.s.startsWith("2×") ? `<span class="c td">2× ${esc(short(k.s.slice(3)))}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>`;
+    el.title = ["QWERTY", "LOWER", "RAISE", "ADJUST"].map((n) => n + ": " + KEYMAP[n][i]).join("\n");
+  });
+  const c = (n) => `<b class="info-k" style="color:${LAYERS[n].color}">${n}</b>`;
+  $("info").innerHTML = `<span><b>FULL</b> · center QWERTY · top left ${c("LOWER")} · top right ${c("RAISE")} · bottom left ${c("ADJUST")}</span><span>Breathing keys: switch layer · orange <b style="color:var(--eva-orange)">2×</b>: double tap · COLEMAK not included</span>`;
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.l === "FULL"));
+}
+// ---------- 3D stack ----------
+// Drawn as you think of them: LOWER below the base, RAISE and ADJUST above, COLEMAK on top.
+const STACK = [
+  ["LOWER", "Hold the left middle thumb key. Several taps lock it."],
+  ["QWERTY", "Base layer, where you normally type."],
+  ["RAISE", "Hold the right middle thumb key. Several taps lock it."],
+  ["ADJUST", "From LOWER or RAISE, hold the middle thumb key on the other side."],
+  ["COLEMAK", "COLEMAK key in ADJUST: locks and covers everything. Exit by tapping reset or unplugging."],
+];
+function buildStack() {
+  STACK.forEach(([name, how], z) => {
+    const c = LAYERS[name].color, pl = document.createElement("div");
+    pl.className = "plate3d"; pl.dataset.l = name;
+    pl.style.setProperty("--z", z); pl.style.setProperty("--c0", c);
+    pl.innerHTML = DATA[name].map((k, i) => {
+      const p = pos(i);
+      const cls = (p.tall ? "tall " : "") + (k.cls === "trans" || k.cls === "empty" ? "hole" : k.layer ? "lk" : "");
+      return `<i class="${cls}" style="left:calc(var(--p)*${p.x});top:calc(var(--p)*${p.y});${p.r ? `transform:rotate(${p.r}deg);` : ""}${k.layer ? `--lc:${LAYERS[k.layer].color}` : ""}"></i>`;
+    }).join("") + `<b>${name}</b>`;
+    pl.onclick = () => $("tabs").querySelector(`[data-l="${name}"]`).click();
+    $("tower").append(pl);
+    const li = document.createElement("li");
+    li.dataset.l = name; li.style.setProperty("--c", c);
+    li.innerHTML = `<b>${name}</b><span>${how}</span>`;
+    li.onclick = pl.onclick;
+    $("stack-list").prepend(li);
+  });
+}
+function stackFocus(name) {
+  $("tower").classList.toggle("focus", name !== "FULL");
+  document.querySelectorAll(".plate3d, .stack-list li").forEach((el) => el.classList.toggle("on", el.dataset.l === name));
+  const sel = STACK.findIndex(([n]) => n === name);
+  document.querySelectorAll(".plate3d").forEach((el, z) => el.classList.toggle("above", sel >= 0 && z > sel));
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+for (const name of TABS) {
+  const b = document.createElement("button");
+  b.className = "tab"; b.setAttribute("role", "tab"); b.dataset.l = name;
+  b.style.setProperty("--c", LAYERS[name].color);
+  b.innerHTML = `<i></i>${name}`;
+  b.onclick = () => { if (mode === "help") setMode("explore"); showLayer(name); markHold(name); };
+  $("tabs").append(b);
+}
+
+// Help mode: which keys open the on-screen help (Hammerspoon, ⌘Esc). Indices: Esc 0, Cmd 36.
+const HELP = { color: "#ffc53d", keys: [0, 36] };
+function showHelp() {
+  showLayer("QWERTY");
+  document.documentElement.style.setProperty("--glow", HELP.color);
+  keys.forEach((el) => el.classList.remove("hold"));
+  HELP.keys.forEach((i) => { keys[i].classList.add("hold", "breathe"); keys[i].style.setProperty("--hc", HELP.color); });
+  $("info").innerHTML = `<span><b>HELP</b> · on-screen layer map</span><span>Hold Cmd (thumb) + Esc (pinky), left hand</span>`;
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", false));
+}
+
+// Which thumb keys must be held to reach a layer (indices into the 42-key list).
+const HOLD = { QWERTY: [], COLEMAK: [], LOWER: [37], RAISE: [40], ADJUST: [37, 40], FULL: [] };
+function markHold(layer) {
+  keys.forEach((el) => el.classList.remove("hold"));
+  HOLD[layer].forEach((i) => { keys[i].classList.add("hold"); keys[i].style.setProperty("--hc", LAYERS[layer].color); });
+}
+
+function findKey(e) {
+  const cands = [...ORDER.filter((n) => n === current), ...ORDER.filter((n) => n !== current && n !== "COLEMAK")];
+  const numpad = e.code.startsWith("Numpad");
+  const mod = e.shiftKey ? "S" : e.altKey ? "A" : "";
+  for (const name of numpad ? ["ADJUST"] : cands) {
+    const i = DATA[name].findIndex((k) => {
+      if (numpad) return k.code === e.code;
+      if (k.code && k.code.startsWith("Numpad")) return false;
+      if (e.key === "Dead") return k.dead && k.code === e.code && k.mod === mod;
+      return k.out != null && (k.out === e.key || (/^[A-ZÑ]$/.test(e.key) && k.out === e.key.toLowerCase()));
+    });
+    if (i >= 0) return { name, i };
+  }
+  return null;
+}
+
+function flash(i) {
+  const el = keys[i];
+  el.classList.add("lit");
+  setTimeout(() => el.classList.remove("lit"), 260);
+}
+
+let mode = "explore";
+function setMode(m) {
+  mode = m;
+  $("m-explore").setAttribute("aria-pressed", m === "explore");
+  $("m-practice").setAttribute("aria-pressed", m === "practice");
+  $("m-help").setAttribute("aria-pressed", m === "help");
+  $("practice").hidden = m !== "practice";
+  $("help").hidden = m !== "help";
+  $("explore-note").hidden = m !== "explore";
+  $("stack").hidden = m !== "explore";
+  keys.forEach((el) => el.classList.remove("hold", "goal", "breathe"));
+  document.body.classList.toggle("helping", m === "help");
+  clearTimeout(hintTimer);
+  if (m === "practice") next();
+  else if (m === "help") showHelp();
+  else showLayer(current === "AYUDA" ? "QWERTY" : current);
+}
+$("m-explore").onclick = () => setMode("explore");
+$("m-practice").onclick = () => setMode("practice");
+$("m-help").onclick = () => setMode("help");
+
+// ---------- Practice ----------
+const POOLS = {
+  "Symbols": (k, n) => n === "RAISE",
+  "Numbers": (k, n) => n === "LOWER" && /^\d$/.test(k.out),
+  "Arrows": (k) => /^Arrow/.test(k.out),
+  "Numpad": (k, n) => n === "ADJUST",
+  "All": () => true,
+};
+const isNum = (k) => !!k.code && k.code.startsWith("Numpad");
+const ITEMS = [];
+const seen = new Set();
+for (const name of ["LOWER", "RAISE", "ADJUST", "QWERTY"]) {
+  DATA[name].forEach((k, i) => {
+    if (!k.out || /^[a-z]$/.test(k.out) || k.out.length > 1 && !/^Arrow/.test(k.out)) return;
+    const id = isNum(k) ? "num" + k.out : k.out;
+    if (seen.has(id) || (name === "QWERTY" && !"ñ,.-º".includes(k.out))) return;
+    seen.add(id);
+    ITEMS.push({ id, name, i, k });
+  });
+}
+const ARROW = { ArrowUp: "↑", ArrowDown: "↓", ArrowLeft: "←", ArrowRight: "→" };
+const shown = (it) => ARROW[it.k.out] || it.k.out;
+
+let pool = "Symbols", target = null, startT = 0, hintTimer = null, missed = false, streak = 0;
+let stats = {};
+try { stats = JSON.parse(localStorage.getItem("corne-dojo-stats") || "{}"); } catch {}
+const save = () => { try { localStorage.setItem("corne-dojo-stats", JSON.stringify(stats)); } catch {} };
+
+for (const p of Object.keys(POOLS)) {
+  const b = document.createElement("button");
+  b.textContent = p; b.dataset.p = p;
+  b.onclick = () => { pool = p; renderPools(); next(); };
+  $("pools").append(b);
+}
+function renderPools() { document.querySelectorAll("#pools button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.p === pool)); }
+
+function weight(it) {
+  const s = stats[it.id];
+  if (!s) return 3;
+  return 1 + (s.err / Math.max(1, s.n)) * 6 + Math.min(3, (s.ms / s.n) / 1500);
+}
+function next() {
+  const list = ITEMS.filter((it) => POOLS[pool](it.k, it.name) && it !== target);
+  let r = Math.random() * list.reduce((a, it) => a + weight(it), 0);
+  target = list.find((it) => (r -= weight(it)) <= 0) || list[0];
+  missed = false; startT = performance.now();
+  const t = $("target");
+  t.innerHTML = esc(shown(target)) + (isNum(target.k) ? '<small style="display:block;font-size:12px;color:var(--muted)">numpad</small>' : ""); t.className = "target";
+  showLayer("QWERTY"); markHold("QWERTY");
+  $("hint").innerHTML = "Think where it is before looking. The hint shows up in 4 s.";
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(hint, 4000);
+}
+function hint() {
+  showLayer(target.name);
+  markHold(target.name);
+  keys[target.i].classList.add("goal");
+  const how = target.name === "QWERTY" ? "It is on the <b>base layer</b>." : `Layer <b style="color:${LAYERS[target.name].color}">${target.name}</b>: ${LAYERS[target.name].how.toLowerCase()}.`;
+  $("hint").innerHTML = how;
+}
+function answer(e) {
+  const ok = e.key === target.k.out && (!isNum(target.k) || e.code.startsWith("Numpad"));
+  const s = (stats[target.id] ||= { n: 0, err: 0, ms: 0 });
+  if (ok) {
+    s.n++; s.ms += Math.min(10000, performance.now() - startT);
+    if (missed) s.err++;
+    streak = missed ? 0 : streak + 1;
+    $("target").className = "target ok";
+    save(); renderStats();
+    setTimeout(next, 250);
+  } else {
+    if (["Shift", "Alt", "Control", "Meta", "CapsLock"].includes(e.key)) return;
+    missed = true; streak = 0;
+    const t = $("target"); t.className = "target"; void t.offsetWidth; t.className = "target bad";
+    clearTimeout(hintTimer); hint();
+  }
+  $("sc-streak").textContent = streak;
+}
+function renderStats() {
+  const rows = ITEMS.filter((it) => stats[it.id]).map((it) => ({ it, s: stats[it.id] }));
+  const n = rows.reduce((a, r) => a + r.s.n, 0), err = rows.reduce((a, r) => a + r.s.err, 0), ms = rows.reduce((a, r) => a + r.s.ms, 0);
+  $("sc-acc").textContent = n ? Math.round((1 - err / n) * 100) + "%" : "–";
+  $("sc-ms").textContent = n ? (ms / n / 1000).toFixed(1) + " s" : "–";
+  rows.sort((a, b) => weight(b.it) - weight(a.it));
+  if (!rows.length) { $("weak").innerHTML = `<p class="empty-stats">The characters you take longest to find or get wrong will show up here. Saved only in this browser.</p>`; return; }
+  $("weak").innerHTML = `<table><thead><tr><th>Character</th><th>Layer</th><th>Errors</th><th>Time</th></tr></thead><tbody>` +
+    rows.slice(0, 8).map(({ it, s }) => `<tr><td class="sym">${esc(shown(it))}</td><td><span class="chip" style="--c:${LAYERS[it.name].color}">${it.name}</span></td><td>${s.err}/${s.n}</td><td>${(s.ms / s.n / 1000).toFixed(1)} s</td></tr>`).join("") +
+    `</tbody></table>`;
+}
+$("reset").onclick = () => { stats = {}; save(); renderStats(); };
+
+// ---------- Overlay (Hammerspoon window) ----------
+const OVERLAY = location.hash === "#overlay";
+const startLayer = "FULL"; // always opens on the all-layers view
+const host = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.corne;
+function setPinned(p) { $("pin").setAttribute("aria-pressed", p); $("pin").textContent = p ? "Pinned" : "Pin"; }
+function setMini(m) { document.body.classList.toggle("mini", m); $("mini").setAttribute("aria-pressed", m); $("mini").textContent = m ? "Large" : "Mini"; }
+function setCover(c) { document.body.classList.toggle("cover", c); }
+if (OVERLAY) {
+  document.body.classList.add("overlay");
+  $("pin").onclick = () => host && host.postMessage("pin");
+  $("close").onclick = () => host && host.postMessage("close");
+  $("mini").onclick = () => host && host.postMessage("mini");
+  setCover(true); // header always shown (hidden only in mini)
+  // Tell Hammerspoon the content height so the window fits it.
+  if (host && window.ResizeObserver) new ResizeObserver(() => host.postMessage("h:" + Math.ceil(document.querySelector(".wrap").getBoundingClientRect().height))).observe(document.querySelector(".wrap"));
+  // Mini: drag the thumbnail from anywhere except the buttons; Hammerspoon moves the window.
+  document.addEventListener("mousedown", (e) => {
+    if (!host || !document.body.classList.contains("mini") || e.target.closest("button")) return;
+    let x = e.screenX, y = e.screenY;
+    const move = (ev) => { host.postMessage(`move:${ev.screenX - x},${ev.screenY - y}`); x = ev.screenX; y = ev.screenY; };
+    const up = () => { removeEventListener("mousemove", move); removeEventListener("mouseup", up); host.postMessage("moved"); };
+    addEventListener("mousemove", move); addEventListener("mouseup", up);
+    e.preventDefault();
+  });
+  host && host.postMessage("ready");
+}
+
+// ---------- Keyboard ----------
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey) return;
+  if (OVERLAY && /^[1-6]$/.test(e.key)) { document.querySelectorAll(".tab")[e.key - 1].click(); e.preventDefault(); return; }
+  if (OVERLAY && e.key === "Escape") { host && host.postMessage("close"); return; }
+  if (e.key === " " || e.key.startsWith("Arrow") || e.key === "Tab" || e.key === "Backspace" || e.key === "'" || e.key === "/") e.preventDefault();
+  if (mode === "help") return; // keys stay fixed on ⌘ + Esc
+  if (mode === "practice") { if (target) answer(e); return; }
+  // Keys like ! or @ arrive as Shift/AltGr followed by the key a few ms later (the keyboard sends the
+  // modifier itself). Wait briefly before showing a lone modifier so those combos don't light Shift.
+  clearTimeout(modTimer);
+  if (e.key === "Shift" || e.key === "Alt") { if (!e.repeat) modTimer = setTimeout(() => show(e), 120); return; }
+  show(e);
+});
+let modTimer = null;
+function show(e) {
+  const hit = findKey(e);
+  if (!hit) return;
+  if (current === "FULL") { flash(hit.i); return; }
+  if (hit.name !== current) showLayer(hit.name);
+  markHold(hit.name);
+  flash(hit.i);
+}
+function updateFocus() { $("focus").hidden = OVERLAY || document.hasFocus(); }
+window.addEventListener("focus", updateFocus);
+window.addEventListener("blur", updateFocus);
+$("focus").onclick = () => { window.focus(); $("focus").hidden = true; };
+
+$("copy").onclick = async () => {
+  const b = $("copy");
+  try { await navigator.clipboard.writeText($("install").textContent); b.textContent = "Copied"; }
+  catch { getSelection().selectAllChildren($("install")); b.textContent = "Select and copy with ⌘C"; }
+  setTimeout(() => (b.textContent = "Copy commands"), 2000);
+};
+
+buildStack(); renderPools(); renderStats(); showLayer(startLayer); updateFocus();
+</script>
