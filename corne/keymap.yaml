@@ -135,172 +135,212 @@ layers:
   QWERTY:
   - - t: Esc
       s: '2×: Caps'
+      type: led-80ff00
     - t: Q
       right: タ
+      type: led-7400ff
     - t: W
       right: テ
+      type: led-7400ff
     - t: E
       right: イ
+      type: led-7400ff
     - t: R
       right: ス
+      type: led-7400ff
     - t: T
       right: カ
+      type: led-7400ff
     - t: Y
       right: ン
+      type: led-7400ff
     - t: U
       right: ナ
+      type: led-7400ff
     - t: I
       right: ニ
+      type: led-7400ff
     - t: O
       right: ラ
+      type: led-7400ff
     - t: P
       right: セ
+      type: led-7400ff
     - t: ⌫
+      type: led-80ff00
   - - t: Tab
+      type: led-80ff00
     - t: A
       s: '2×: @'
       right: チ
+      type: led-7400ff
     - t: S
       right: ト
+      type: led-7400ff
     - t: D
       right: シ
+      type: led-7400ff
     - t: F
       right: ハ
+      type: led-7400ff
     - t: G
       right: キ
+      type: led-7400ff
     - t: H
       right: ク
+      type: led-7400ff
     - t: J
       right: マ
+      type: led-7400ff
     - t: K
       right: ノ
+      type: led-7400ff
     - t: L
       right: リ
+      type: led-7400ff
     - t: Ñ
+      type: led-7400ff
     - t: ´
+      type: led-80ff00
   - - t: Shift
+      type: led-80ff00
     - t: Z
       right: ツ
+      type: led-7400ff
     - t: X
       right: サ
+      type: led-7400ff
     - t: C
       right: ソ
+      type: led-7400ff
     - t: V
       right: ヒ
+      type: led-7400ff
     - t: B
       right: コ
+      type: led-7400ff
     - t: N
       right: ミ
+      type: led-7400ff
     - t: M
       right: モ
+      type: led-7400ff
     - t: ','
+      type: led-7400ff
     - t: .
+      type: led-7400ff
     - t: '-'
+      type: led-7400ff
     - t: AltGr
+      type: led-80ff00
   - - t: Cmd
+      type: led-80ff00
     - t: LOWER
       s: TT · layer
-      type: lk-lower
+      type: lk-lower led-80ff00
     - t: ␣
+      type: led-80ff00
     - t: ⏎ Enter
+      type: led-80ff00
     - t: RAISE
       s: TT · layer
-      type: lk-raise
+      type: lk-raise led-80ff00
     - t: Ctrl
       s: '2×: Mission Ctrl'
+      type: led-80ff00
   LOWER:
   - - t: Esc
       s: '2×: Caps'
-      type: led-85ff00
+      type: led-7400ff
     - t: '1'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '2'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '3'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '4'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '5'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '6'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '7'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '8'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '9'
-      type: led-7a00ff
+      type: led-ff5400
     - t: '0'
-      type: led-7a00ff
+      type: led-ff5400
     - t: ⌫
-      type: led-85ff00
+      type: led-7400ff
   - - t: Tab
-      type: led-85ff00
+      type: led-7400ff
     - t: Wheel →
-      type: led-7a00ff
+      type: led-ff5400
     - t: Wheel ↓
-      type: led-7a00ff
+      type: led-ff5400
     - t: Right click
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mouse ↑
-      type: led-7a00ff
+      type: led-ff5400
     - t: Click
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mission Ctrl
-      type: led-7a00ff
+      type: led-ff5400
     - t: ↑
-      type: led-7a00ff
+      type: led-ff5400
     - t: ◂◂
       h: Rew
-      type: led-7a00ff
+      type: led-ff5400
     - t: ▸▸
       h: FFwd
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mute
-      type: led-7a00ff
+      type: led-ff5400
     - t: Play
-      type: led-85ff00
+      type: led-7400ff
   - - t: Shift
-      type: led-85ff00
+      type: led-7400ff
     - t: Wheel ←
-      type: led-7a00ff
+      type: led-ff5400
     - t: Wheel ↑
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mouse ←
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mouse ↓
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mouse →
-      type: led-7a00ff
+      type: led-ff5400
     - t: ←
-      type: led-7a00ff
+      type: led-ff5400
     - t: ↓
-      type: led-7a00ff
+      type: led-ff5400
     - t: →
-      type: led-7a00ff
+      type: led-ff5400
     - t: Mission Ctrl
-      type: led-7a00ff
+      type: led-ff5400
     - t: Launchpad
-      type: led-7a00ff
+      type: led-ff5400
     - t: PrtSc
-      type: led-85ff00
+      type: led-7400ff
   - - t: Cmd
-      type: led-85ff00
+      type: led-7400ff
     - t: ▽
-      type: trans led-85ff00
+      type: trans led-7400ff
     - t: ␣
-      type: led-85ff00
+      type: led-7400ff
     - t: ⏎ Enter
-      type: led-85ff00
+      type: led-7400ff
     - t: ADJUST
       s: TT · layer
-      type: lk-adjust led-85ff00
+      type: lk-adjust led-7400ff
     - t: Ctrl
       s: '2×: Mission Ctrl'
-      type: led-85ff00
+      type: led-7400ff
   RAISE:
   - - t: º
-      type: led-8000ff
+      type: led-7400ff
     - t: '!'
       type: led-80ff00
     - t: '@'
@@ -322,9 +362,9 @@ layers:
     - t: )
       type: led-80ff00
     - t: ⌫
-      type: led-8000ff
+      type: led-7400ff
   - - t: Tab
-      type: led-8000ff
+      type: led-7400ff
     - t: ''
       type: led-80ff00
     - t: ''
@@ -346,9 +386,9 @@ layers:
     - t: \
       type: led-80ff00
     - t: '`'
-      type: led-8000ff
+      type: led-7400ff
   - - t: Shift
-      type: led-8000ff
+      type: led-7400ff
     - t: ''
       type: led-80ff00
     - t: ''
@@ -370,193 +410,193 @@ layers:
     - t: '|'
       type: led-80ff00
     - t: '~'
-      type: led-8000ff
+      type: led-7400ff
   - - t: Cmd
-      type: led-8000ff
+      type: led-7400ff
     - t: ADJUST
       s: TT · layer
-      type: lk-adjust led-8000ff
+      type: lk-adjust led-7400ff
     - t: ␣
-      type: led-8000ff
+      type: led-7400ff
     - t: ⏎ Enter
-      type: led-8000ff
+      type: led-7400ff
     - t: ▽
-      type: trans led-8000ff
+      type: trans led-7400ff
     - t: Ctrl
       s: '2×: Mission Ctrl'
-      type: led-8000ff
+      type: led-7400ff
   ADJUST:
   - - t: RGB on/off
-      type: led-fffb00
+      type: led-ffbd69
     - t: COLEMAK
       s: TG · layer
-      type: lk-colemak led-0004ff
+      type: lk-colemak led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: '7'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '8'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '9'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '-'
-      type: led-0004ff
+      type: led-69ffc7
     - t: /
-      type: led-0004ff
+      type: led-69ffc7
     - t: ⌫
-      type: led-fffb00
+      type: led-ffbd69
   - - t: RGB mode
-      type: led-fffb00
+      type: led-ffbd69
     - t: Hue +
-      type: led-0004ff
+      type: led-69ffc7
     - t: Sat +
-      type: led-0004ff
+      type: led-69ffc7
     - t: Bright +
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: '4'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '5'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '6'
-      type: led-0004ff
+      type: led-69ffc7
     - t: +
-      type: led-0004ff
+      type: led-69ffc7
     - t: '*'
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-fffb00
+      type: led-ffbd69
   - - t: Hue −
-      type: led-fffb00
+      type: led-ffbd69
     - t: Sat −
-      type: led-0004ff
+      type: led-69ffc7
     - t: Bright −
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-0004ff
+      type: led-69ffc7
     - t: '1'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '2'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '3'
-      type: led-0004ff
+      type: led-69ffc7
     - t: '='
-      type: led-0004ff
+      type: led-69ffc7
     - t: ·
-      type: led-0004ff
+      type: led-69ffc7
     - t: ''
-      type: led-fffb00
+      type: led-ffbd69
   - - t: Cmd
-      type: led-fffb00
+      type: led-ffbd69
     - t: ▽
-      type: trans led-fffb00
+      type: trans led-ffbd69
     - t: ␣
-      type: led-fffb00
+      type: led-ffbd69
     - t: ⏎ Enter
-      type: led-fffb00
+      type: led-ffbd69
     - t: ▽
-      type: trans led-fffb00
+      type: trans led-ffbd69
     - t: '0'
-      type: led-fffb00
+      type: led-ffbd69
   COLEMAK:
   - - t: Esc
       s: '2×: Caps'
-      type: led-00ffff
+      type: led-ff0000
     - t: Q
-      type: led-ff0000
+      type: led-7400ff
     - t: W
-      type: led-ff0000
+      type: led-7400ff
     - t: F
-      type: led-ff0000
+      type: led-7400ff
     - t: P
-      type: led-ff0000
+      type: led-7400ff
     - t: G
-      type: led-ff0000
+      type: led-7400ff
     - t: J
-      type: led-ff0000
+      type: led-7400ff
     - t: L
-      type: led-ff0000
+      type: led-7400ff
     - t: U
-      type: led-ff0000
+      type: led-7400ff
     - t: Y
-      type: led-ff0000
+      type: led-7400ff
     - t: Ñ
-      type: led-ff0000
+      type: led-7400ff
     - t: ⌫
-      type: led-00ffff
+      type: led-ff0000
   - - t: Tab
-      type: led-00ffff
+      type: led-80ff00
     - t: A
-      type: led-ff0000
+      type: led-7400ff
     - t: R
-      type: led-ff0000
+      type: led-7400ff
     - t: S
-      type: led-ff0000
+      type: led-7400ff
     - t: T
-      type: led-ff0000
+      type: led-7400ff
     - t: D
-      type: led-ff0000
+      type: led-7400ff
     - t: H
-      type: led-ff0000
+      type: led-7400ff
     - t: N
-      type: led-ff0000
+      type: led-7400ff
     - t: E
-      type: led-ff0000
+      type: led-7400ff
     - t: I
-      type: led-ff0000
+      type: led-7400ff
     - t: O
-      type: led-ff0000
+      type: led-7400ff
     - t: ´
-      type: led-00ffff
+      type: led-80ff00
   - - t: Shift
-      type: led-00ffff
+      type: led-80ff00
     - t: Z
-      type: led-ff0000
+      type: led-7400ff
     - t: X
-      type: led-ff0000
+      type: led-7400ff
     - t: C
-      type: led-ff0000
+      type: led-7400ff
     - t: V
-      type: led-ff0000
+      type: led-7400ff
     - t: B
-      type: led-ff0000
+      type: led-7400ff
     - t: K
-      type: led-ff0000
+      type: led-7400ff
     - t: M
-      type: led-ff0000
+      type: led-7400ff
     - t: ','
-      type: led-ff0000
+      type: led-7400ff
     - t: .
-      type: led-ff0000
+      type: led-7400ff
     - t: '-'
-      type: led-ff0000
+      type: led-7400ff
     - t: Esc
-      type: led-00ffff
+      type: led-80ff00
   - - t: Cmd
-      type: led-00ffff
+      type: led-80ff00
     - t: LOWER
       s: TT · layer
-      type: lk-lower led-00ffff
+      type: lk-lower led-80ff00
     - t: ␣
-      type: led-00ffff
+      type: led-80ff00
     - t: ⏎ Enter
-      type: led-00ffff
+      type: led-80ff00
     - t: RAISE
       s: TT · layer
-      type: lk-raise led-00ffff
+      type: lk-raise led-80ff00
     - t: Ctrl
       s: '2×: Mission Ctrl'
-      type: led-00ffff
+      type: led-80ff00

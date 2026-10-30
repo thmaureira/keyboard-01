@@ -103,10 +103,10 @@ body.helping .key.layer { animation: none; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 3px var(--glow), 0 0 24px var(--glow); } }
 /* FULL: all layers on one keycap, Miryoku style. Center = QWERTY, corners = LOWER / RAISE / ADJUST. */
 .key .c { position: absolute; font-family: var(--body); font-weight: 600; font-size: calc(var(--u) * .2); line-height: 1; max-width: 60%; overflow: hidden; white-space: nowrap; }
-.key .c.lo { top: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #5b17b0; }
+.key .c.lo { top: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #c24300; }
 .key .c.ra { top: calc(var(--u) * .07); right: calc(var(--u) * .08); color: #2d6b00; }
-.key .c.ad { bottom: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #1f3ac0; }
-.key .c.td { top: calc(var(--u) * -.13); left: 50%; transform: translateX(-50%); max-width: none; background: var(--eva-orange); color: #1a1226; border-radius: 99px; padding: 1px calc(var(--u) * .08); font-size: calc(var(--u) * .16); }
+.key .c.ad { bottom: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #00806a; }
+.key .c.td { top: calc(var(--u) * -.13); left: 50%; transform: translateX(-50%); max-width: none; background: #7400ff; color: #fff; border-radius: 99px; padding: 1px calc(var(--u) * .08); font-size: calc(var(--u) * .16); }
 .key.full .t { font-size: calc(var(--u) * .22); }
 .key.full .t.long { font-size: calc(var(--u) * .15); }
 .info-k { font-weight: 600; }
@@ -282,13 +282,13 @@ body.overlay.mini .key .s { display: none; }
       <div class="stack3d" aria-hidden="true"><div class="tower" id="tower"></div></div>
       <ol class="stack-list" id="stack-list"></ol>
       <ul class="ovhow">
-        <li><b style="--c:#a855ff">LOWER</b> / <b style="--c:#8cff1a">RAISE</b> <span>Hold: active while held. Several taps in a row: locks it; another tap releases it.</span></li>
-        <li><b style="--c:#4d6bff">ADJUST</b> <span>Hold LOWER and RAISE together.</span></li>
-        <li><b style="--c:#ff3b3b">COLEMAK</b> <span>COLEMAK key in ADJUST: locks and covers everything. To exit: tap reset or unplug.</span></li>
-        <li><b style="--c:var(--eva-orange)">2×</b> <span>Double tap: Esc → Caps, A → @, Ctrl → Mission Control.</span></li>
+        <li><b style="--c:#ff6a1a">LOWER</b> / <b style="--c:#8cff1a">RAISE</b> <span>Hold: active while held. Several taps in a row: locks it; another tap releases it.</span></li>
+        <li><b style="--c:#69ffc7">ADJUST</b> <span>Hold LOWER and RAISE together.</span></li>
+        <li><b style="--c:#ff3b3b">COLEMAK</b> <span>COLEMAK key in ADJUST: swaps the base layer (LOWER, RAISE and ADJUST still work on top). The same key goes back to QWERTY.</span></li>
+        <li><b style="--c:#b98cff">2×</b> <span>Double tap: Esc → Caps, A → @, Ctrl → Mission Control.</span></li>
       </ul>
     </div>
-    <p class="small">LOWER goes down and RAISE goes up from QWERTY; ADJUST is holding both. Where a layer defines no key (▽, drawn as a hole) the QWERTY key is used. COLEMAK sits on top and covers every key, layer keys included: once locked, the thumbs cannot get you out.</p>
+    <p class="small">LOWER goes down and RAISE goes up from QWERTY; ADJUST is holding both. Where a layer defines no key (▽, drawn as a hole) the QWERTY key is used. COLEMAK replaces QWERTY as the base (with the KB-01 firmware): LOWER, RAISE and ADJUST still work on top of it.</p>
   </section>
 
   <section class="practice" id="practice" hidden>
@@ -347,14 +347,14 @@ const KEYMAP = __LAYERS__;
 const LED = __LEDS__, LEDS = LED.keys;
 const ORDER = ["QWERTY", "LOWER", "RAISE", "ADJUST", "COLEMAK"];
 const TABS = ["FULL", "QWERTY", "LOWER", "RAISE", "ADJUST", "COLEMAK"];
-// LED colors as set in the firmware's layer_state_set_user (HSV hue 191, 64, 170, 0). QWERTY keeps the normal RGB effect.
+// EVA-01 LED palette of the KB-01 firmware (qmk/kb01/keymap.c, layer_colors); all LEDs breathe.
 const LAYERS = {
-  QWERTY:  { color: "#9aa4bd", led: "normal RGB effect", how: "Base layer" },
-  LOWER:   { color: "#a855ff", led: "purple", under: "green", how: "Hold the left middle thumb key" },
-  RAISE:   { color: "#8cff1a", led: "lime green", under: "purple", how: "Hold the right middle thumb key" },
-  ADJUST:  { color: "#4d6bff", led: "blue", under: "yellow", how: "From LOWER or RAISE, hold the middle thumb key on the other side" },
+  QWERTY:  { color: "#9b5cff", led: "EVA purple, lime green edges", under: "purple", how: "Base layer" },
+  LOWER:   { color: "#ff6a1a", led: "orange, purple edges", under: "orange", how: "Hold the left middle thumb key" },
+  RAISE:   { color: "#8cff1a", led: "lime green, purple edges", under: "lime green", how: "Hold the right middle thumb key" },
+  ADJUST:  { color: "#69ffc7", led: "mint, orange edges", under: "mint", how: "From LOWER or RAISE, hold the middle thumb key on the other side" },
   FULL:    { color: "#f2a33a", led: "", how: "" },
-  COLEMAK: { color: "#ff3b3b", led: "red", under: "cyan", how: "In ADJUST, the COLEMAK key (second from the top left) — it stays locked" },
+  COLEMAK: { color: "#ff3b3b", led: "QWERTY colors, Esc and Backspace breathe red", under: "purple", how: "In ADJUST, the COLEMAK key (second from the top left) swaps the base; the same key goes back" },
 };
 const ES = { MINS: "'", EQL: "¡", LBRC: "`", RBRC: "+", NUHS: "ç", SCLN: "ñ", QUOT: "´", GRV: "º", COMM: ",", DOT: ".", SLSH: "-", NUBS: "<" };
 const ES_S = { 1: "!", 2: '"', 3: "·", 4: "$", 5: "%", 6: "&", 7: "/", 8: "(", 9: ")", 0: "=", MINS: "?", EQL: "¿", LBRC: "^", RBRC: "*", NUHS: "Ç", QUOT: "¨", GRV: "ª", COMM: ";", DOT: ":", SLSH: "_", NUBS: ">" };
@@ -470,7 +470,7 @@ function showFull() {
     el.title = ["QWERTY", "LOWER", "RAISE", "ADJUST"].map((n) => n + ": " + KEYMAP[n][i]).join("\n");
   });
   const c = (n) => `<b class="info-k" style="color:${LAYERS[n].color}">${n}</b>`;
-  $("info").innerHTML = `<span><b>FULL</b> · center QWERTY · top left ${c("LOWER")} · top right ${c("RAISE")} · bottom left ${c("ADJUST")}</span><span>Breathing keys: switch layer · orange <b style="color:var(--eva-orange)">2×</b>: double tap · COLEMAK not included</span>`;
+  $("info").innerHTML = `<span><b>FULL</b> · center QWERTY · top left ${c("LOWER")} · top right ${c("RAISE")} · bottom left ${c("ADJUST")}</span><span>Breathing keys: switch layer · purple <b style="color:#b98cff">2×</b>: double tap · COLEMAK not included</span>`;
   document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.l === "FULL"));
 }
 // ---------- 3D stack ----------
@@ -480,7 +480,7 @@ const STACK = [
   ["QWERTY", "Base layer, where you normally type."],
   ["RAISE", "Hold the right middle thumb key. Several taps lock it."],
   ["ADJUST", "From LOWER or RAISE, hold the middle thumb key on the other side."],
-  ["COLEMAK", "COLEMAK key in ADJUST: locks and covers everything. Exit by tapping reset or unplugging."],
+  ["COLEMAK", "COLEMAK key in ADJUST: swaps the base layer; the same key goes back to QWERTY."],
 ];
 function buildStack() {
   STACK.forEach(([name, how], z) => {

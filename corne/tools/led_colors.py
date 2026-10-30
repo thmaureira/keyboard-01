@@ -1,9 +1,9 @@
 """Per-key LED colors of every layer, applied to the diagrams.
 
-Layer hues come from layer_state_set_user in the firmware. The saved RGB effect (photos confirm it)
-lights normal keys in the layer hue and the keys whose LED is flagged as modifier in g_led_config
-(outer columns and thumbs) plus the underglow in the opposite hue (hue + 128).
-QWERTY keeps the normal effect and is drawn without glow.
+Colors are the EVA-01 palette of the KB-01 firmware (qmk/kb01/keymap.c, layer_colors): its EVA_BREATH
+effect lights normal keys and the underglow in the layer hue, and the keys whose LED is flagged as
+modifier in g_led_config (outer columns and thumbs) in hue + speed (the accent).
+COLEMAK keeps the QWERTY colors; Esc and Backspace breathe red.
 
 Outputs:
   - led-colors.json                 {"keys": per-layer list of 42 colors, "underglow": per-layer color}
@@ -19,7 +19,10 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-LAYER_HUE = {"LOWER": 191, "RAISE": 64, "ADJUST": 170, "COLEMAK": 0}
+# (hue, sat, speed) per layer, as in layer_colors; accent = hue + speed
+LAYER_HSV = {"QWERTY": (190, 255, 130), "LOWER": (14, 255, 176), "RAISE": (64, 255, 126),
+             "ADJUST": (112, 150, 168), "COLEMAK": (190, 255, 130)}
+COLEMAK_WARN = {0: "#ff0000", 11: "#ff0000"}  # Esc, Backspace
 KEYCAP = "#e6dbf9"  # lilac keycaps
 
 # g_led_config in the firmware's .data image (flash offset = RAM address + DATA_SHIFT).
@@ -49,8 +52,8 @@ def matrix_pos(i):
     return (3, 3 + t) if t < 3 else (7, 8 - t)
 
 
-def color(hue):
-    r, g, b = colorsys.hsv_to_rgb((hue % 256) / 256, 1, 1)
+def color(hue, sat=255):
+    r, g, b = colorsys.hsv_to_rgb((hue % 256) / 256, sat / 255, 1)
     return "#%02x%02x%02x" % (round(r * 255), round(g * 255), round(b * 255))
 
 
@@ -59,9 +62,10 @@ def main():
     led_of = lambda r, c: flash[MATRIX_CO + DATA_SHIFT + r * 6 + c]
     is_mod = [flash[FLAGS + DATA_SHIFT + led_of(*matrix_pos(i))] == LED_FLAG_MODIFIER for i in range(42)]
 
-    keys = {"QWERTY": None}
-    keys.update({layer: [color(h + 128 if is_mod[i] else h) for i in range(42)] for layer, h in LAYER_HUE.items()})
-    underglow = {"QWERTY": None, **{layer: color(h + 128) for layer, h in LAYER_HUE.items()}}
+    keys = {layer: [color(h + sp if is_mod[i] else h, s) for i in range(42)] for layer, (h, s, sp) in LAYER_HSV.items()}
+    for i, c in COLEMAK_WARN.items():
+        keys["COLEMAK"][i] = c
+    underglow = {layer: color(h, s) for layer, (h, s, sp) in LAYER_HSV.items()}
     (ROOT / "led-colors.json").write_text(json.dumps({"keys": keys, "underglow": underglow}, indent=1))
 
     keymap_path = ROOT / "keymap.yaml"
@@ -87,10 +91,10 @@ def main():
     for c in sorted({c for v in keys.values() if v for c in v}):
         css.append(f"rect.key.led-{c[1:]} {{ stroke: {c}aa; stroke-width: 1.5; filter: drop-shadow(0 0 3px {c}88); }}")
     # FULL layer corner legends (tools/full_layer.py) and breathing layer keys, as in Corne Dojo.
-    css += ["text.tl { fill: #5b17b0; } text.tr { fill: #2d6b00; } text.bl { fill: #1f3ac0; } "
-            "text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #b35a00; font-weight: bold; }",
+    css += ["text.tl { fill: #c24300; } text.tr { fill: #2d6b00; } text.bl { fill: #00806a; } "
+            "text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #6a00e0; font-weight: bold; }",
             "@keyframes breath { 50% { filter: drop-shadow(0 0 6px var(--lc)); stroke: var(--lc); stroke-width: 2.5; } }"]
-    for layer, c in {"lower": "#a855ff", "raise": "#8cff1a", "adjust": "#4d6bff", "colemak": "#ff3b3b"}.items():
+    for layer, c in {"lower": "#ff6a1a", "raise": "#8cff1a", "adjust": "#69ffc7", "colemak": "#ff3b3b"}.items():
         css.append(f"rect.key.lk-{layer} {{ --lc: {c}; animation: breath 2.4s ease-in-out infinite; }}")
     for cfg in (ROOT / "drawer-config.yaml",):
         header = "".join(l for l in cfg.read_text().splitlines(True) if l.startswith("#"))
