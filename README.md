@@ -2,7 +2,7 @@
 
 # KEYBOARD-01
 
-### An opinionated Corne v3 with QMK customization and on-screen help for Mac
+### An opinionated Corne rev1 with QMK customization and on-screen help for Mac
 
 <sub>キボド 01 · EVA-01 palette · Miryoku-style layers · animated OLED</sub>
 
