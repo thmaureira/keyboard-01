@@ -2,17 +2,17 @@
 
 Configuration of my Corne (foostan crkbd, QMK, Pro Micro), recovered by reading the firmware that was on the keyboard.
 
-![Layer map](corne/keymap.svg)
+![⌘ Esc window (Large)](corne/img/overlay-large.png)
 
-The first layer of the diagram, **FULL**, puts every layer on each key: QWERTY in the center, LOWER top left, RAISE top right, ADJUST bottom left and the double taps (`2×`) in purple. Keys that switch layer breathe in the color of the layer they open (when the SVG is opened in a browser).
+**Try it online: [Corne Dojo](https://thmaureira.github.io/keyboard-01/)**
 
 | Corne Dojo (FULL) | One layer (LOWER) |
 |---|---|
 | ![Corne Dojo on FULL](corne/img/dojo-full.png) | ![Corne Dojo on LOWER](corne/img/dojo-lower.png) |
 | **Layers stacked in 3D** | **Help: ⌘ Esc shortcut** |
 | ![3D layers](corne/img/dojo-stack.png) | ![Help mode](corne/img/dojo-help.png) |
-| **⌘ Esc window (Large)** | **Thumbnail (Mini)** |
-| ![Large window](corne/img/overlay-large.png) | ![Thumbnail](corne/img/overlay-mini.png) |
+| **⌘ Esc thumbnail (Mini)** | |
+| ![Thumbnail](corne/img/overlay-mini.png) | |
 
 ## Layers
 
@@ -171,3 +171,9 @@ avrdude -p atmega32u4 -c avr109 -P /dev/cu.usbmodemXXXX -U flash:r:corne_dump.he
 # restore the backup
 avrdude -p atmega32u4 -c avr109 -P /dev/cu.usbmodemXXXX -U flash:w:corne/corne_dump.hex:i
 ```
+
+## Layer map
+
+![Layer map](corne/keymap.svg)
+
+The first layer of the diagram, **FULL**, puts every layer on each key: QWERTY in the center, LOWER top left, RAISE top right, ADJUST bottom left and the double taps (`2×`) in purple. Keys that switch layer breathe in the color of the layer they open (when the SVG is opened in a browser).
