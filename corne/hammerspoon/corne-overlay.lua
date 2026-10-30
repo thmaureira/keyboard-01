@@ -114,6 +114,21 @@ end, function()
   if not pinned then hide() end
 end)
 
+-- Layer report from the KB-01 firmware (corne/qmk/kb01): each layer change taps F16..F20.
+-- The open window follows it (base layer -> FULL); the keys are swallowed so apps never see them.
+-- Needs Accessibility permission for Hammerspoon (System Settings > Privacy & Security).
+local LAYER_KEYS = { f16 = "FULL", f17 = "LOWER", f18 = "RAISE", f19 = "ADJUST", f20 = "COLEMAK" }
+local layerByCode = {}
+for key, layer in pairs(LAYER_KEYS) do layerByCode[hs.keycodes.map[key]] = layer end
+M.layerTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.keyUp }, function(e)
+  local layer = layerByCode[e:getKeyCode()]
+  if not layer then return false end
+  if view and e:getType() == hs.eventtap.event.types.keyDown then
+    view:evaluateJavaScript(('document.querySelector(".tab[data-l=%s]").click()'):format(layer))
+  end
+  return true
+end):start()
+
 -- Reload the window when corne-dojo.html is copied over again.
 M.watcher = hs.pathwatcher.new(dir, function(files)
   for _, f in ipairs(files) do
