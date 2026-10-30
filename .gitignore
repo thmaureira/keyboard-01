@@ -1,2 +1,6 @@
 .DS_Store
 __pycache__/
+
+# flash backups (copies of corne/corne_dump.hex or of the previous flash)
+corne/qmk/backup_*.hex
+corne/qmk/.prev_*.hex
