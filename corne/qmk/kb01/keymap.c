@@ -1,56 +1,62 @@
-// KB-01: Corne rev1 keymap recovered from the old firmware, with three changes:
+// KB-01: Corne rev1 keymap, rebuilt from the recovered firmware with Miryoku-style layers (see below) and:
 //  1. COLEMAK is a default (base) layer toggled from ADJUST, so LOWER/RAISE/ADJUST keep working
 //     on top of it and the same key goes back to QWERTY (before, TG(4) on the top layer trapped you).
 //     LEDs use an EVA-01 palette per layer (see layer_colors).
 //  2. Every layer change taps F16..F20 so the Mac on-screen help can follow the active layer.
 //  3. Two taps lock LOWER/RAISE/ADJUST (TAPPING_TOGGLE 2 in config.h).
-// OLED: EVA-01 style. Left: layer, Caps Lock and an EVA-01 silhouette (stands, walks, runs, gets a halo
-// from 70 wpm, draws the rifle with Caps Lock, grows wings on COLEMAK). Right: the KB-01 plate and a SYNC bar (100 wpm = full sync).
+// OLED: EVA-01 style. Left: layer, Caps Lock and an EVA-01 silhouette (faces the front when idle, walks, runs,
+// gets a halo from 70 wpm, holds the rifle with Caps Lock, crouches on Space, carries the lance on COLEMAK). Right: the KB-01 plate and a SYNC bar (100 wpm = full sync).
 #include QMK_KEYBOARD_H
 #include "lib/lib8tion/lib8tion.h"
 
 // COLEMAK sits right above QWERTY: QMK ORs the default layer into the active ones, so as a base
 // layer it has to stay below LOWER/RAISE/ADJUST or it would cover them.
 enum layers { _QWERTY, _COLEMAK, _LOWER, _RAISE, _ADJUST };
-enum custom_keycodes { CLMK_TG = SAFE_RANGE };
+enum custom_keycodes { CLMK_TG = SAFE_RANGE, ES_TILD };
+// macOS treats the board as ISO and swaps two keycodes: KC_GRV types < and KC_NUBS types º (so ⌥KC_NUBS is \).
+// ES_TILD types ~, which is the dead key ⌥ñ followed by a space.
 
 tap_dance_action_t tap_dance_actions[] = {
-    [0] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
-    [1] = ACTION_TAP_DANCE_DOUBLE(KC_A, RALT(KC_2)),
-    [2] = ACTION_TAP_DANCE_DOUBLE(KC_RCTL, KC_MCTL),
+    [0] = ACTION_TAP_DANCE_DOUBLE(KC_A, RALT(KC_2)),   // 2×A: @
+    [1] = ACTION_TAP_DANCE_DOUBLE(KC_RCTL, KC_CAPS),   // 2×Ctrl: Caps Lock
 };
 
+// Miryoku-style: each layer is held with one thumb and its keys sit on the other hand.
+// LOWER (left thumb): numpad on the right hand (its Backspace deletes a word, ⌥⌫), arrows (↑ on W), . and , around ↑, line start/end and modifiers on the left.
+// RAISE (right thumb): symbols on the left hand; Mission Control, paste, copy, cut, undo and modifiers on the right.
+// ADJUST (both): COLEMAK and the mouse on the left; Rectangle window shortcuts and media on the right.
+// Symbols follow macOS with the Spanish ISO layout.
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT_split_3x6_3(
-              TD(0),       KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,           KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,    KC_BSPC,
-             KC_TAB,      TD(1),       KC_S,       KC_D,       KC_F,       KC_G,           KC_H,       KC_J,       KC_K,       KC_L,    KC_SCLN,    KC_QUOT,
+             KC_ESC,       KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,           KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,    KC_BSPC,
+             KC_TAB,      TD(0),       KC_S,       KC_D,       KC_F,       KC_G,           KC_H,       KC_J,       KC_K,       KC_L,    KC_SCLN,    KC_QUOT,
             KC_LSFT,       KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,           KC_N,       KC_M,    KC_COMM,     KC_DOT,    KC_SLSH,    KC_RALT,
-                                                KC_LGUI,      TT(_LOWER),     KC_SPC,         KC_ENT,      TT(_RAISE),      TD(2)
+                                                KC_LGUI, TT(_LOWER),     KC_SPC,         KC_ENT, TT(_RAISE),      TD(1)
     ),
     [_LOWER] = LAYOUT_split_3x6_3(
-              TD(0),       KC_1,       KC_2,       KC_3,       KC_4,       KC_5,           KC_6,       KC_7,       KC_8,       KC_9,       KC_0,    KC_BSPC,
-             KC_TAB,    MS_WHLR,    MS_WHLD,    MS_BTN2,    MS_UP,      MS_BTN1,        KC_MCTL,      KC_UP,    KC_MRWD,    KC_MFFD,    KC_MUTE,    KC_MPLY,
-            KC_LSFT,    MS_WHLL,    MS_WHLU,    MS_LEFT,    MS_DOWN,    MS_RGHT,        KC_LEFT,    KC_DOWN,    KC_RGHT,    KC_MCTL,    KC_LPAD,    KC_PSCR,
-                                                KC_LGUI,    KC_TRNS,     KC_SPC,         KC_ENT,      TT(_ADJUST),      TD(2)
+             KC_ESC,     KC_DOT,      KC_UP,    KC_COMM,      KC_NO,      KC_NO,  LSFT(KC_RBRC),       KC_7,       KC_8,       KC_9,    KC_SLSH,LALT(KC_BSPC),
+             KC_TAB,    KC_LEFT,    KC_DOWN,    KC_RGHT,LGUI(KC_LEFT),LGUI(KC_RGHT),     LSFT(KC_7),       KC_4,       KC_5,       KC_6,    KC_RBRC, LSFT(KC_0),
+            KC_LSFT,    KC_LGUI,    KC_LALT,    KC_LCTL,      KC_NO,      KC_NO,           KC_0,       KC_1,       KC_2,       KC_3,     KC_DOT,    KC_COMM,
+                                                KC_LGUI,    KC_TRNS,     KC_SPC,         KC_ENT,TT(_ADJUST),      TD(1)
     ),
     [_RAISE] = LAYOUT_split_3x6_3(
-             KC_GRV, LSFT(KC_1), RALT(KC_2), RALT(KC_3), LSFT(KC_4), LSFT(KC_5),    LSFT(KC_LBRC), LSFT(KC_6),LSFT(KC_RBRC), LSFT(KC_8), LSFT(KC_9),    KC_BSPC,
-             KC_TAB,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,        KC_SLSH, LSFT(KC_0),RALT(KC_LBRC),RALT(KC_RBRC),RALT(KC_GRV),    KC_LBRC,
-            KC_LSFT,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,    LSFT(KC_SLSH),    KC_RBRC,RALT(KC_QUOT),RALT(KC_NUHS), RALT(KC_1), RALT(KC_4),
-                                                KC_LGUI,      TT(_ADJUST),     KC_SPC,         KC_ENT,    KC_TRNS,      TD(2)
+            KC_LBRC, RALT(KC_2), RALT(KC_3),RALT(KC_LBRC),RALT(KC_RBRC), RALT(KC_1),        KC_MCTL, LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z),    KC_BSPC,
+            KC_MINS,     KC_EQL,LSFT(KC_MINS), LSFT(KC_8), LSFT(KC_9), LSFT(KC_7),          KC_NO,    KC_RSFT,    KC_RCTL,    KC_RALT,    KC_RGUI,      KC_NO,
+             KC_GRV,    ES_TILD,RALT(KC_NUBS),RALT(KC_QUOT),RALT(KC_NUHS),  KC_NUBS,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                KC_RBRC,TT(_ADJUST), LSFT(KC_0),         KC_ENT,    KC_TRNS,      TD(1)
     ),
     [_ADJUST] = LAYOUT_split_3x6_3(
-            RM_TOGG,    CLMK_TG,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_P7,      KC_P8,      KC_P9,    KC_SLSH, LSFT(KC_7),    KC_BSPC,
-            RM_NEXT,    RM_HUEU,    RM_SATU,    RM_VALU,      KC_NO,      KC_NO,          KC_P4,      KC_P5,      KC_P6,    KC_RBRC,LSFT(KC_RBRC),      KC_NO,
-            RM_HUED,    RM_SATD,    RM_VALD,      KC_NO,      KC_NO,      KC_NO,          KC_P1,      KC_P2,      KC_P3, LSFT(KC_0), LSFT(KC_3),      KC_NO,
-                                                KC_LGUI,    KC_TRNS,     KC_SPC,         KC_ENT,    KC_TRNS,      KC_P0
+            CLMK_TG,    MS_BTN1,      MS_UP,    MS_WHLU,    MS_WHLD,      KC_NO,          KC_NO,  LCA(KC_U), LCA(KC_UP),  LCA(KC_I),      KC_NO,    KC_MNXT,
+              KC_NO,    MS_LEFT,    MS_DOWN,    MS_RGHT,      KC_NO,      KC_NO,  LCAG(KC_RGHT),LCA(KC_LEFT),LCA(KC_ENT),LCA(KC_RGHT),  KC_VOLU,    KC_MPLY,
+              KC_NO,      KC_NO,    MS_BTN2,      KC_NO,      KC_NO,      KC_NO,          KC_NO,  LCA(KC_J),LCA(KC_DOWN),  LCA(KC_K),    KC_VOLD,    KC_MUTE,
+                                                KC_LGUI,    KC_TRNS,     KC_SPC,         KC_ENT,    KC_TRNS,    RM_TOGG
     ),
     [_COLEMAK] = LAYOUT_split_3x6_3(
-              TD(0),       KC_Q,       KC_W,       KC_F,       KC_P,       KC_G,           KC_J,       KC_L,       KC_U,       KC_Y,    KC_SCLN,    KC_BSPC,
+             KC_ESC,       KC_Q,       KC_W,       KC_F,       KC_P,       KC_G,           KC_J,       KC_L,       KC_U,       KC_Y,    KC_SCLN,    KC_BSPC,
              KC_TAB,       KC_A,       KC_R,       KC_S,       KC_T,       KC_D,           KC_H,       KC_N,       KC_E,       KC_I,       KC_O,    KC_QUOT,
             KC_LSFT,       KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,           KC_K,       KC_M,    KC_COMM,     KC_DOT,    KC_SLSH,     KC_ESC,
-                                                KC_LGUI,      TT(_LOWER),     KC_SPC,         KC_ENT,      TT(_RAISE),      TD(2)
+                                                KC_LGUI, TT(_LOWER),     KC_SPC,         KC_ENT, TT(_RAISE),      TD(1)
     ),
 };
 // clang-format on
@@ -121,11 +127,13 @@ bool rgb_matrix_indicators_user(void) {
 #ifdef OLED_ENABLE
 #    include "eva_sprites.h"
 
-// OLED (both halves rotated, 32x128). Left: layer, Caps Lock and an EVA-01 silhouette that follows
-// the typing speed. Right: the KB-01 plate and the SYNC bar (100 wpm = full sync).
+// OLED (both halves rotated, 32x128). Left: layer, Caps Lock and an EVA-01 silhouette: faces the front
+// when idle, walks under 40 wpm, runs from 40 (with the halo from 70), holds the rifle with Caps Lock, crouches
+// on Space and carries the lance on COLEMAK. Right: the KB-01 plate and the SYNC bar (100 wpm = full sync).
 #    define OLED_W 32
 #    define FULL_SYNC 100
-#    define HALO_WPM  70   // from here on the EVA runs with the halo
+#    define RUN_WPM   40   // from here on the EVA runs
+#    define HALO_WPM  70   // and from here on with the halo
 
 static void put_byte(uint8_t page, uint8_t x, uint8_t v) { oled_write_raw_byte(v, page * OLED_W + x); }
 
@@ -143,7 +151,7 @@ static void hazard(uint8_t page, uint8_t first_row) {
 
 // Draws a sprite so its last page lands on page 14 and clears the pages above it down to page 5
 // (page 4 is the CAPS label).
-// lift (0-7) moves it up that many pixels (the jump), dx shifts it sideways.
+// lift (0-7) moves it up that many pixels, dx shifts it sideways.
 static void draw_eva(const char *spr, uint8_t npages, uint8_t lift, int8_t dx) {
     uint8_t top = 15 - npages;
     for (uint8_t p = 5; p < top - 1; p++)
@@ -182,40 +190,35 @@ static void write_tall(const char *str) {
     }
 }
 
-// With the rifle out (Caps Lock), every key fires a bullet from the muzzle (x 22, y 94) to the right edge.
-#    define MUZZLE_X 22
-#    define MUZZLE_Y 94
+// With the rifle out (Caps Lock), every key fires a bullet from the muzzle to the right edge. The muzzle is
+// at (26, 83) standing and at (22, 94) crouched.
 static uint8_t  bullets[3];   // x of each bullet in flight, 0 = free
 static uint16_t bullet_timer;
 static void fire(void) {
     for (uint8_t i = 0; i < 3; i++)
         if (!bullets[i]) {
-            bullets[i] = MUZZLE_X;
+            bullets[i] = 1;   // placed at the muzzle when drawn
             return;
         }
 }
-static void draw_bullets(uint8_t lift) {
-    bool step = timer_elapsed(bullet_timer) > 25;
+static void draw_bullets(uint8_t x0, uint8_t y) {
+    bool step = timer_elapsed(bullet_timer) > 30;
     if (step) bullet_timer = timer_read();
     for (uint8_t i = 0; i < 3; i++) {
         if (!bullets[i]) continue;
-        oled_write_pixel(bullets[i], MUZZLE_Y - lift, true);
-        oled_write_pixel(bullets[i] + 1, MUZZLE_Y - lift, true);
-        if (step && (bullets[i] += 3) >= OLED_W) bullets[i] = 0;
+        if (bullets[i] < x0) bullets[i] = x0;
+        oled_write_pixel(bullets[i], y, true);
+        oled_write_pixel(bullets[i] + 1, y, true);
+        if (step && (bullets[i] += 2) >= OLED_W) bullets[i] = 0;
     }
 }
 
-static uint16_t jump_timer;
-static bool     jumping;
-// Space makes the EVA jump: up to 6 px and back down in 300 ms.
-static uint8_t jump_lift(void) {
-    if (!jumping) return 0;
-    uint16_t t = timer_elapsed(jump_timer);
-    if (t >= 300) {
-        jumping = false;
-        return 0;
-    }
-    return 6 - (t > 150 ? t - 150 : 150 - t) / 25;
+// Space makes the EVA crouch for 300 ms.
+static uint16_t crouch_timer;
+static bool     crouching;
+static bool crouched(void) {
+    if (crouching && timer_elapsed(crouch_timer) >= 300) crouching = false;
+    return crouching;
 }
 
 static void render_left(uint8_t wpm, bool tick) {
@@ -226,24 +229,25 @@ static void render_left(uint8_t wpm, bool tick) {
         case _ADJUST: write_tall(PSTR("ADJST")); break;
         default:      write_tall(get_highest_layer(default_layer_state) == _COLEMAK ? PSTR("CLMAK") : PSTR("QWRTY"));
     }
-    uint8_t j = jump_lift();
+    bool caps = host_keyboard_led_state().caps_lock;
     oled_set_cursor(0, 4);
-    oled_write_P(host_keyboard_led_state().caps_lock ? PSTR("CAPS") : PSTR("    "), host_keyboard_led_state().caps_lock);
-    if (host_keyboard_led_state().caps_lock) {
-        draw_eva(eva_caps, EVA_CAPS_PAGES, j ? j : tick, 0);                  // pallet rifle out
-        draw_bullets(j ? j : tick);
+    oled_write_P(caps ? PSTR("CAPS") : PSTR("    "), caps);
+    if (crouched()) {
+        draw_eva(eva_crouch, EVA_CROUCH_PAGES, 0, 0);                         // Space: crouch with the rifle
+        if (caps) draw_bullets(22, 94);
+    } else if (caps) {
+        draw_eva(eva_gun, EVA_GUN_PAGES, 0, 0);                               // standing, rifle out
+        draw_bullets(26, 83);
     } else if (get_highest_layer(default_layer_state) == _COLEMAK) {
-        draw_eva(eva_wings, EVA_WINGS_PAGES, j ? j : tick, 0);                // floating
-    } else if (j) {
-        draw_eva(eva_walk1, EVA_WALK1_PAGES, j, 0);                           // jump, legs apart
+        draw_eva(eva_lance, EVA_LANCE_PAGES, tick, 0);                        // lance, breathing
     } else if (wpm == 0) {
-        draw_eva(eva_stand, EVA_STAND_PAGES, 0, 0);
-    } else if (wpm < 50) {
+        draw_eva(eva_front, EVA_FRONT_PAGES, 0, 0);                           // idle: faces the front
+    } else if (wpm < RUN_WPM) {
         draw_eva(tick ? eva_walk2 : eva_walk1, EVA_WALK1_PAGES, 0, 0);        // stride, then passing step
     } else if (wpm < HALO_WPM) {
-        draw_eva(tick ? eva_run2 : eva_run1, EVA_RUN1_PAGES, 0, 0);            // leaning stride
+        draw_eva(eva_run, EVA_RUN_PAGES, tick ? 2 : 0, 0);                    // sprint, bouncing 2 px
     } else {
-        draw_eva(tick ? eva_sync2 : eva_sync1, EVA_SYNC1_PAGES, 0, 0);        // 70+ wpm: running with the halo
+        draw_eva(eva_sync, EVA_SYNC_PAGES, tick ? 2 : 0, 0);                  // 70+ wpm: sprint with the halo
     }
     hazard(15, 2);
 }
@@ -264,7 +268,7 @@ bool oled_task_user(void) {
     static uint16_t anim_timer = 0;
     static bool     tick       = false;
     uint8_t         wpm        = get_current_wpm();
-    if (timer_elapsed(anim_timer) > (wpm >= 50 ? 150 : 250)) {
+    if (timer_elapsed(anim_timer) > (wpm >= RUN_WPM ? 150 : 250)) {
         anim_timer = timer_read();
         tick       = !tick;
     }
@@ -280,6 +284,12 @@ bool oled_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case ES_TILD:
+            if (record->event.pressed) {
+                tap_code16(RALT(KC_SCLN));
+                tap_code(KC_SPC);
+            }
+            return false;
         case CLMK_TG:
             if (record->event.pressed) {
                 // Swap the base layer; not saved, so unplugging always comes back on QWERTY.
@@ -288,9 +298,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
 #ifdef OLED_ENABLE
         case KC_SPC:
-            if (record->event.pressed && !jumping) {
-                jumping    = true;
-                jump_timer = timer_read();
+            if (record->event.pressed) {
+                crouching    = true;
+                crouch_timer = timer_read();
             }
             break;
         default:
