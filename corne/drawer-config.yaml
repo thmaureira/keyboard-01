@@ -19,7 +19,7 @@ draw_config:
 
     rect.key.led-ffbd69 { stroke: #ffbd69aa; stroke-width: 1.5; filter: drop-shadow(0 0 3px #ffbd6988); }
 
-    text.tl { fill: #c24300; } text.tr { fill: #2d6b00; } text.bl { fill: #00806a; } text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #6a00e0; font-weight: bold; }
+    text.tl, text.tr, text.bl { paint-order: stroke; stroke: #1a1226; stroke-width: 1.6px; stroke-linejoin: round; } text.tl { fill: #ff6a1a; } text.tr { fill: #8cff1a; } text.bl { fill: #69ffc7; } text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #6a00e0; font-weight: bold; stroke: none; }
 
     @keyframes breath { 50% { filter: drop-shadow(0 0 6px var(--lc)); stroke: var(--lc); stroke-width: 2.5; } }
 

@@ -91,8 +91,8 @@ def main():
     for c in sorted({c for v in keys.values() if v for c in v}):
         css.append(f"rect.key.led-{c[1:]} {{ stroke: {c}aa; stroke-width: 1.5; filter: drop-shadow(0 0 3px {c}88); }}")
     # FULL layer corner legends (tools/full_layer.py) and breathing layer keys, as in Corne Dojo.
-    css += ["text.tl { fill: #c24300; } text.tr { fill: #2d6b00; } text.bl { fill: #00806a; } "
-            "text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #6a00e0; font-weight: bold; }",
+    css += ["text.tl, text.tr, text.bl { paint-order: stroke; stroke: #1a1226; stroke-width: 1.6px; stroke-linejoin: round; } text.tl { fill: #ff6a1a; } text.tr { fill: #8cff1a; } text.bl { fill: #69ffc7; } "
+            "text.td-tl.tl, text.td-tr.tr, text.td-br.br, text.td-s.shifted { fill: #6a00e0; font-weight: bold; stroke: none; }",
             "@keyframes breath { 50% { filter: drop-shadow(0 0 6px var(--lc)); stroke: var(--lc); stroke-width: 2.5; } }"]
     for layer, c in {"lower": "#ff6a1a", "raise": "#8cff1a", "adjust": "#69ffc7", "colemak": "#ff3b3b"}.items():
         css.append(f"rect.key.lk-{layer} {{ --lc: {c}; animation: breath 2.4s ease-in-out infinite; }}")

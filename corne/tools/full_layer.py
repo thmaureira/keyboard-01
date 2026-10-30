@@ -12,8 +12,12 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 LAYERS = ["QWERTY", "LOWER", "RAISE", "ADJUST", "COLEMAK"]
-SHORT = {"Mission Ctrl": "MCtl", "Launchpad": "LPad", "Right click": "RClk", "Bright +": "Bri+", "Bright −": "Bri−",
+SHORT = {"Mission Control": "MCtl", "Line start": "Home", "⌫ word": "⌫w", "Line end": "End", "Next display": "Disp→", "◀ Left": "◀", "Right ▶": "▶",
+         "▲ Top": "▲", "▼ Bottom": "▼", "RGB on/off": "RGB", "Mission Ctrl": "MCtl", "Launchpad": "LPad", "Right click": "RClk", "Bright +": "Bri+", "Bright −": "Bri−",
          "RGB on/off": "RGB", "RGB mode": "Mode", "⏎ Enter": "Enter"}
+
+
+MODS = {"⇧", "Ctrl", "Opt", "Cmd", "Opt / AltGr"}   # held modifiers are left out of FULL
 
 
 def short(t):
@@ -49,12 +53,14 @@ for i, base in enumerate(layers["QWERTY"]):
     key = {"t": base["t"]}
     for corner, name in (("tl", "LOWER"), ("tr", "RAISE"), ("bl", "ADJUST")):
         t = layers[name][i].get("t", "")
-        if t and t not in ("▽", base["t"]) and t not in LAYERS:
+        if t and t not in ("▽", base["t"]) and t not in LAYERS and t not in MODS:
             key[corner] = short(t)
     if str(base.get("s", "")).startswith("2×"):
         # The 2× tap dance goes in the first free corner (type td-<corner> colors it).
         free = next(c for c in ("tl", "tr", "br", "s") if c not in key)
         key[free] = "2×" + short(base["s"].split(": ", 1)[1])
+    elif base.get("s") and "br" not in key:
+        key["br"] = "⇧" + base["s"]               # shifted symbol (Spanish ISO), e.g. ⇧: on the "." key
     types = [t for t in str(base.get("type", "")).split() if not t.startswith("led-")]
     if str(base.get("s", "")).startswith("2×"):
         types.append("td-" + free)

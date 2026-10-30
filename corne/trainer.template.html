@@ -103,9 +103,13 @@ body.helping .key.layer { animation: none; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 3px var(--glow), 0 0 24px var(--glow); } }
 /* FULL: all layers on one keycap, Miryoku style. Center = QWERTY, corners = LOWER / RAISE / ADJUST. */
 .key .c { position: absolute; font-family: var(--body); font-weight: 600; font-size: calc(var(--u) * .2); line-height: 1; max-width: 60%; overflow: hidden; white-space: nowrap; }
-.key .c.lo { top: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #c24300; }
-.key .c.ra { top: calc(var(--u) * .07); right: calc(var(--u) * .08); color: #2d6b00; }
-.key .c.ad { bottom: calc(var(--u) * .07); left: calc(var(--u) * .08); color: #00806a; }
+/* FULL corners: a chip in the color of the layer the legend belongs to (same as its tab and LEDs). */
+.key .c.lo, .key .c.ra, .key .c.ad { background: var(--chip); color: #1a1226; border-radius: 3px; padding: 0 2px; }
+.key .c.lo { top: calc(var(--u) * .07); left: calc(var(--u) * .08); --chip: #ff6a1a; }
+.key .c.ra { top: calc(var(--u) * .07); right: calc(var(--u) * .08); --chip: #8cff1a; }
+.key .c.ad { bottom: calc(var(--u) * .07); left: calc(var(--u) * .08); --chip: #69ffc7; }
+.key .c.sy { bottom: calc(var(--u) * .07); right: calc(var(--u) * .08); color: #8a6a00; }
+.key .c.sh { bottom: calc(var(--u) * .07); right: calc(var(--u) * .08); color: #6a00e0; }
 .key .c.td { top: calc(var(--u) * -.13); left: 50%; transform: translateX(-50%); max-width: none; background: #7400ff; color: #fff; border-radius: 99px; padding: 1px calc(var(--u) * .08); font-size: calc(var(--u) * .16); }
 .key.full .t { font-size: calc(var(--u) * .22); }
 .key.full .t.long { font-size: calc(var(--u) * .15); }
@@ -270,7 +274,7 @@ body.overlay.mini .key .s { display: none; }
   <section class="stage" id="stage">
     <div class="board" id="board" aria-label="Corne keyboard"><div class="unit" aria-hidden="true">KB-01<small>キボド 01</small></div><div class="unit unit-r" aria-hidden="true">KB-01<small>キボド 01</small></div></div>
     <div class="layer-info" id="info"></div>
-    <p class="legend">Colored border: switches to that layer (hold = while held, several taps = locks it). <b>2×</b> = double tap. ▽ = same key as the base layer. Symbols follow macOS with the Spanish ISO layout.</p>
+    <p class="legend">Colored border: switches to that layer (hold = while held, several taps = locks it). <b>2×</b> = double tap. <b>⇧</b> = with Shift. ▽ = same key as the base layer. Symbols follow macOS with the Spanish ISO layout.</p>
     <button class="focus-note" id="focus" hidden>Click here and type with your Corne</button>
   </section>
 
@@ -283,9 +287,9 @@ body.overlay.mini .key .s { display: none; }
       <ol class="stack-list" id="stack-list"></ol>
       <ul class="ovhow">
         <li><b style="--c:#ff6a1a">LOWER</b> / <b style="--c:#8cff1a">RAISE</b> <span>Hold: active while held. Several taps in a row: locks it; another tap releases it.</span></li>
-        <li><b style="--c:#69ffc7">ADJUST</b> <span>Hold LOWER and RAISE together.</span></li>
+                <li><b style="--c:#69ffc7">ADJUST</b> <span>Hold LOWER and RAISE together: COLEMAK and mouse (left hand), Rectangle windows and media (right hand).</span></li>
         <li><b style="--c:#ff3b3b">COLEMAK</b> <span>COLEMAK key in ADJUST: swaps the base layer (LOWER, RAISE and ADJUST still work on top). The same key goes back to QWERTY.</span></li>
-        <li><b style="--c:#b98cff">2×</b> <span>Double tap: Esc → Caps, A → @, Ctrl → Mission Control.</span></li>
+        <li><b style="--c:#b98cff">2×</b> <span>Double tap: A → @, Ctrl → Caps Lock.</span></li>
       </ul>
     </div>
     <p class="small">LOWER goes down and RAISE goes up from QWERTY; ADJUST is holding both. Where a layer defines no key (▽, drawn as a hole) the QWERTY key is used. COLEMAK replaces QWERTY as the base (with the KB-01 firmware): LOWER, RAISE and ADJUST still work on top of it.</p>
@@ -354,24 +358,30 @@ const LAYERS = {
   RAISE:   { color: "#8cff1a", led: "lime green, purple edges", under: "lime green", how: "Hold the right middle thumb key" },
   ADJUST:  { color: "#69ffc7", led: "mint, orange edges", under: "mint", how: "From LOWER or RAISE, hold the middle thumb key on the other side" },
   FULL:    { color: "#f2a33a", led: "", how: "" },
-  COLEMAK: { color: "#ff3b3b", led: "QWERTY colors, Esc and Backspace breathe red", under: "purple", how: "In ADJUST, the COLEMAK key (second from the top left) swaps the base; the same key goes back" },
+  COLEMAK: { color: "#ff3b3b", led: "QWERTY colors, Esc and Backspace breathe red", under: "purple", how: "In ADJUST, the COLEMAK key (where Esc is) swaps the base; the same key goes back" },
 };
-const ES = { MINS: "'", EQL: "¡", LBRC: "`", RBRC: "+", NUHS: "ç", SCLN: "ñ", QUOT: "´", GRV: "º", COMM: ",", DOT: ".", SLSH: "-", NUBS: "<" };
-const ES_S = { 1: "!", 2: '"', 3: "·", 4: "$", 5: "%", 6: "&", 7: "/", 8: "(", 9: ")", 0: "=", MINS: "?", EQL: "¿", LBRC: "^", RBRC: "*", NUHS: "Ç", QUOT: "¨", GRV: "ª", COMM: ";", DOT: ":", SLSH: "_", NUBS: ">" };
-const ES_A = { 1: "|", 2: "@", 3: "#", 4: "~", 5: "€", 6: "¬", E: "€", LBRC: "[", RBRC: "]", NUHS: "}", QUOT: "{", GRV: "\\" };
+const ES = { MINS: "'", EQL: "¡", LBRC: "`", RBRC: "+", NUHS: "ç", SCLN: "ñ", QUOT: "´", GRV: "<", COMM: ",", DOT: ".", SLSH: "-", NUBS: "º" };   // macOS swaps GRV and NUBS on this board (ISO)
+const ES_S = { 1: "!", 2: '"', 3: "·", 4: "$", 5: "%", 6: "&", 7: "/", 8: "(", 9: ")", 0: "=", MINS: "?", EQL: "¿", LBRC: "^", RBRC: "*", NUHS: "Ç", QUOT: "¨", GRV: ">", COMM: ";", DOT: ":", SLSH: "_", NUBS: "ª" };
+const ES_A = { 1: "|", 2: "@", 3: "#", 4: "~", 5: "€", 6: "¬", E: "€", LBRC: "[", RBRC: "]", NUHS: "}", QUOT: "{", GRV: "≤", NUBS: "\\" };
 // Katakana printed on the keycaps (JIS kana layout), shown on QWERTY.
 const KANA = Object.fromEntries([..."QWERTYUIOPASDFGHJKLZXCVBNM"].map((c, i) => [c, "タテイスカンナニラセチトシハキクマノリツサソヒコミモ"[i]]));
 const DEAD = new Set(["`", "´", "^", "¨"]);
 const CODE = { MINS: "Minus", EQL: "Equal", LBRC: "BracketLeft", RBRC: "BracketRight", NUHS: "Backslash", SCLN: "Semicolon", QUOT: "Quote", GRV: "Backquote", COMM: "Comma", DOT: "Period", SLSH: "Slash", NUBS: "IntlBackslash" };
 const NAMED = {
   ENT: ["Enter", "Enter"], ESC: ["Esc", "Escape"], BSPC: ["⌫", "Backspace"], TAB: ["Tab", "Tab"], SPC: ["Space", " "], CAPS: ["Caps", "CapsLock"],
-  LCTL: ["Ctrl", "Control"], RCTL: ["Ctrl", "Control"], LSFT: ["Shift", "Shift"], RSFT: ["Shift", "Shift"], LALT: ["Opt", "Alt"], RALT: ["Opt / AltGr", "Alt"], LGUI: ["Cmd", "Meta"], RGUI: ["Cmd", "Meta"],
+  LCTL: ["Ctrl", "Control"], RCTL: ["Ctrl", "Control"], LSFT: ["⇧", "Shift"], RSFT: ["⇧", "Shift"], LALT: ["Opt", "Alt"], RALT: ["Opt / AltGr", "Alt"], VOLU: ["Vol +", null], VOLD: ["Vol −", null], LGUI: ["Cmd", "Meta"], RGUI: ["Cmd", "Meta"],
   UP: ["↑", "ArrowUp"], DOWN: ["↓", "ArrowDown"], LEFT: ["←", "ArrowLeft"], RGHT: ["→", "ArrowRight"], PSCR: ["PrtSc", null],
-  MUTE: ["Mute", null], MPLY: ["Play", null], MFFD: ["▸▸", null, "FFwd"], MRWD: ["◂◂", null, "Rew"], MCTL: ["Mission Control", null], LPAD: ["Launch­pad", null],
+  MUTE: ["Mute", null], VOLU: ["Vol +", null], VOLD: ["Vol −", null], MPLY: ["Play", null], MFFD: ["▸▸", null, "FFwd"], MNXT: ["▸▸|", null, "Next"], MRWD: ["◂◂", null, "Rew"], MCTL: ["Mission Control", null], LPAD: ["Launch­pad", null],
   MS_U: ["Mouse ↑", null], MS_D: ["Mouse ↓", null], MS_L: ["Mouse ←", null], MS_R: ["Mouse →", null], BTN1: ["Click", null], BTN2: ["Right click", null],
   WH_U: ["Wheel ↑", null], WH_D: ["Wheel ↓", null], WH_L: ["Wheel ←", null], WH_R: ["Wheel →", null],
 };
-const TD = { 0: ["KC_ESC", "KC_CAPS"], 1: ["KC_A", "RALT(KC_2)"], 2: ["KC_RCTL", "KC_MCTL"] };
+const TD = { 0: ["KC_A", "RALT(KC_2)"], 1: ["KC_RCTL", "KC_CAPS"] };
+// Rectangle window shortcuts (⌃⌥ / ⌃⌥⌘ + key) and macOS editing shortcuts (⌘ + key), sent as one key.
+const WIN = { "LCA(KC_U)": ["↖", "⌃⌥U"], "LCA(KC_UP)": ["▲ Top", "⌃⌥↑"], "LCA(KC_I)": ["↗", "⌃⌥I"], "LCA(KC_LEFT)": ["◀ Left", "⌃⌥←"],
+  "LCA(KC_ENT)": ["Max", "⌃⌥⏎"], "LCA(KC_RGHT)": ["Right ▶", "⌃⌥→"], "LCA(KC_J)": ["↙", "⌃⌥J"], "LCA(KC_DOWN)": ["▼ Bottom", "⌃⌥↓"],
+  "LCA(KC_K)": ["↘", "⌃⌥K"], "LCAG(KC_RGHT)": ["Next display", "⌃⌥⌘→"],
+  "LGUI(KC_V)": ["Paste", "⌘V"], "LGUI(KC_C)": ["Copy", "⌘C"], "LGUI(KC_X)": ["Cut", "⌘X"], "LGUI(KC_Z)": ["Undo", "⌘Z"],
+  "LALT(KC_BSPC)": ["⌫ word", "⌥⌫"], "ES_TILD": ["~", ""], "LGUI(KC_LEFT)": ["Line start", "⌘←"], "LGUI(KC_RGHT)": ["Line end", "⌘→"] };
 const RGB = { RGB_TOG: "RGB on/off", RGB_MOD: "RGB mode", RGB_HUI: "Hue +", RGB_HUD: "Hue −", RGB_SAI: "Sat +", RGB_SAD: "Sat −", RGB_VAI: "Bright +", RGB_VAD: "Bright −" };
 
 function info(kc) {
@@ -379,6 +389,8 @@ function info(kc) {
   if (kc === "KC_NO") return { t: "", cls: "empty" };
   if (kc === "KC_TRNS") return { t: "▽", cls: "trans" };
   if ((m = kc.match(/^TD\((\d)\)$/))) { const [a, b] = TD[m[1]]; const i = info(a); return { ...i, s: "2× " + info(b).t }; }
+  if (WIN[kc]) return { t: WIN[kc][0], s: WIN[kc][1] };
+  if ((m = kc.match(/^LT\((\d), *(KC_\w+)\)$/))) return { ...info(m[2]), cls: "layer", layer: ORDER[m[1]], s: "hold: " + ORDER[m[1]] };
   if ((m = kc.match(/^(TT|TG)\((\d)\)$/))) return { t: ORDER[m[2]], cls: "layer", layer: ORDER[m[2]], s: m[1] === "TG" ? "lock" : "" };
   if (RGB[kc]) return { t: RGB[kc] };
   if ((m = kc.match(/^(LSFT|RALT)\(KC_(\w+)\)$/))) {
@@ -386,10 +398,10 @@ function info(kc) {
     return { t: ch, out: DEAD.has(ch) ? null : ch, dead: DEAD.has(ch), code: codeOf(m[2]), mod: m[1] === "LSFT" ? "S" : "A" };
   }
   const k = kc.replace(/^KC_/, "");
-  if (/^[A-Z]$/.test(k)) return { t: k, out: k.toLowerCase(), code: "Key" + k, kana: KANA[k] };
-  if (/^\d$/.test(k)) return { t: k, out: k, code: "Digit" + k };
+  if (/^[A-Z]$/.test(k)) return { t: k, sh: k, out: k.toLowerCase(), code: "Key" + k, kana: KANA[k] };
+  if (/^\d$/.test(k)) return { t: k, s: "⇧ " + ES_S[k], sh: ES_S[k], out: k, code: "Digit" + k };
   if ((m = k.match(/^P(\d)$/))) return { t: m[1], out: m[1], code: "Numpad" + m[1], s: "num" };
-  if (ES[k]) { const ch = ES[k]; return { t: ch === "ñ" ? "Ñ" : ch, out: DEAD.has(ch) ? null : ch, dead: DEAD.has(ch), code: CODE[k], mod: "" }; }
+  if (ES[k]) { const ch = ES[k]; return { t: ch === "ñ" ? "Ñ" : ch, s: ES_S[k] ? "⇧ " + ES_S[k] : "", sh: ch === "ñ" ? "Ñ" : ES_S[k], out: DEAD.has(ch) ? null : ch, dead: DEAD.has(ch), code: CODE[k], mod: "" }; }
   if (NAMED[k]) return { t: NAMED[k][0], out: NAMED[k][1], s: NAMED[k][2] };
   return { t: k };
 }
@@ -443,14 +455,15 @@ function showLayer(name) {
     if (led) { el.classList.add("led"); el.style.setProperty("--kc", led); } else el.style.removeProperty("--kc");
     if (k.layer) el.style.setProperty("--lc", LAYERS[k.layer].color);
     const long = k.t && k.t.length > 3;
-    el.innerHTML = (k.s ? `<span class="s">${esc(k.s)}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>` + (name === "QWERTY" && k.kana ? `<span class="kana">${k.kana}</span>` : "");
+    const sub = !!k.s;
+    el.innerHTML = (sub ? `<span class="s">${esc(k.s)}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>` + (name === "QWERTY" && k.kana ? `<span class="kana">${k.kana}</span>` : "");
     el.title = KEYMAP[name][i];
   });
   $("info").innerHTML = `<span><b>${name}</b> · keys: ${L.led}${L.under ? " · underglow: " + L.under : ""}</span><span>${L.how}</span>`;
   document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.l === name));
 }
 // Short labels for the corner legends of the FULL view.
-const SHORT = { "Mission Control": "MCtl", "Launch\u00adpad": "LPad", "Right click": "RClk", "Opt / AltGr": "AltGr", "RGB on/off": "RGB", "RGB mode": "Mode", "Sat +": "Sat+", "Sat −": "Sat−", "Bright +": "Bri+", "Brillo −": "Bri−", "Tono +": "Tono+", "Tono −": "Tono−" };
+const SHORT = { "Line start": "Home", "Line end": "End", "Next display": "Disp→", "◀ Left": "◀", "Right ▶": "▶", "▲ Top": "▲", "▼ Bottom": "▼", "Mission Control": "MCtl", "Launch\u00adpad": "LPad", "Right click": "RClk", "Opt / AltGr": "AltGr", "RGB on/off": "RGB", "RGB mode": "Mode", "Sat +": "Sat+", "Sat −": "Sat−", "Bright +": "Bri+", "Vol +": "Vol+", "Vol −": "Vol−", "Brillo −": "Bri−", "Tono +": "Tono+", "Tono −": "Tono−" };
 const short = (t) => SHORT[t] || t.replace(/^(Mouse|Wheel) /, (m, w) => w[0]);
 function showFull() {
   current = "FULL";
@@ -458,6 +471,7 @@ function showFull() {
   document.documentElement.style.setProperty("--under", LAYERS.FULL.color);
   const corner = (name, cls, i) => {
     const k = DATA[name][i];
+    if (/^KC_[LR](SFT|CTL|ALT|GUI)$/.test(KEYMAP[name][i])) return "";   // held modifiers are left out of FULL
     return k.t && k.cls !== "trans" && k.cls !== "layer" && k.t !== DATA.QWERTY[i].t ? `<span class="c ${cls}">${esc(short(k.t))}</span>` : "";
   };
   DATA.QWERTY.forEach((k, i) => {
@@ -466,7 +480,7 @@ function showFull() {
     el.style.removeProperty("--kc");
     if (k.layer) el.style.setProperty("--lc", LAYERS[k.layer].color); else el.style.removeProperty("--lc");
     const long = k.t && k.t.length > 3;
-    el.innerHTML = corner("LOWER", "lo", i) + corner("RAISE", "ra", i) + corner("ADJUST", "ad", i) + (k.s && k.s.startsWith("2×") ? `<span class="c td">2× ${esc(short(k.s.slice(3)))}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>`;
+    el.innerHTML = corner("LOWER", "lo", i) + corner("RAISE", "ra", i) + corner("ADJUST", "ad", i) + (k.s && k.s.startsWith("2×") ? `<span class="c td">2× ${esc(short(k.s.slice(3)))}</span>` : k.s && k.s.startsWith("⇧") ? `<span class="c sh">${esc(k.s.replace(" ", ""))}</span>` : "") + `<span class="t${long ? " long" : ""}">${esc(k.t)}</span>`;
     el.title = ["QWERTY", "LOWER", "RAISE", "ADJUST"].map((n) => n + ": " + KEYMAP[n][i]).join("\n");
   });
   const c = (n) => `<b class="info-k" style="color:${LAYERS[n].color}">${n}</b>`;
@@ -476,9 +490,9 @@ function showFull() {
 // ---------- 3D stack ----------
 // Drawn as you think of them: LOWER below the base, RAISE and ADJUST above, COLEMAK on top.
 const STACK = [
-  ["LOWER", "Hold the left middle thumb key. Several taps lock it."],
+  ["LOWER", "Hold the left middle thumb key: numpad on the right hand, arrows on the left. Several taps lock it."],
   ["QWERTY", "Base layer, where you normally type."],
-  ["RAISE", "Hold the right middle thumb key. Several taps lock it."],
+  ["RAISE", "Hold the right middle thumb key: symbols on the left hand. Several taps lock it."],
   ["ADJUST", "From LOWER or RAISE, hold the middle thumb key on the other side."],
   ["COLEMAK", "COLEMAK key in ADJUST: swaps the base layer; the same key goes back to QWERTY."],
 ];
@@ -584,7 +598,6 @@ const POOLS = {
   "Symbols": (k, n) => n === "RAISE",
   "Numbers": (k, n) => n === "LOWER" && /^\d$/.test(k.out),
   "Arrows": (k) => /^Arrow/.test(k.out),
-  "Numpad": (k, n) => n === "ADJUST",
   "All": () => true,
 };
 const isNum = (k) => !!k.code && k.code.startsWith("Numpad");
