@@ -1,10 +1,49 @@
-# Corne: keymap and tools to learn the layers
+<div align="center">
+
+# KEYBOARD-01
+
+### An opinionated Corne v3 with QMK customization and on-screen help for Mac
+
+<sub>キボド 01 · EVA-01 palette · Miryoku-style layers · animated OLED</sub>
+
+<br>
+
+![QMK](https://img.shields.io/badge/QMK-crkbd%2Frev1-8b5cf6?style=for-the-badge&labelColor=1a1226)
+![macOS](https://img.shields.io/badge/macOS-Hammerspoon-8cff1a?style=for-the-badge&labelColor=1a1226)
+![Layers](https://img.shields.io/badge/layers-5-ff6a1a?style=for-the-badge&labelColor=1a1226)
+![No Vial](https://img.shields.io/badge/no-Vial-69ffc7?style=for-the-badge&labelColor=1a1226)
+
+<br>
+
+**42 keys. Five layers. Zero guessing.**<br>
+Every symbol, number, arrow, window shortcut and media key sits one thumb away, and when you forget where,<br>
+hold <kbd>⌘</kbd> + <kbd>Esc</kbd> and the whole keyboard appears on screen.
+
+<br>
+
+<a href="https://thmaureira.github.io/keyboard-01/"><img src="https://img.shields.io/badge/%E2%96%B6%20%20TRY%20CORNE%20DOJO%20ONLINE-thmaureira.github.io%2Fkeyboard--01-ff6a1a?style=for-the-badge&labelColor=8b5cf6" alt="Try Corne Dojo online"></a>
+
+<br><br>
+
+<a href="https://thmaureira.github.io/keyboard-01/"><img src="corne/img/overlay-large.png" alt="KEYBOARD-01 on-screen map, FULL tab" width="100%"></a>
+
+</div>
+
+---
+
+## Highlights
+
+| | |
+|---|---|
+| **FULL view** | Every layer on every key, color-coded: LOWER orange, RAISE green, ADJUST cyan, double taps purple |
+| **On-screen help** | <kbd>⌘</kbd> <kbd>Esc</kbd> opens the map on the Mac, switching to whatever layer the keyboard reports |
+| **Corne Dojo** | Web trainer to learn the layers by typing, [online](https://thmaureira.github.io/keyboard-01/) |
+| **Miryoku-inspired** | Numpad and arrows on LOWER, symbols on RAISE, mouse, Rectangle windows and media on ADJUST |
+| **EVA-01 OLED** | The unit stands, walks, sprints, crouches, fires and draws the lance as you type |
 
 Configuration of my Corne (foostan crkbd, QMK, Pro Micro), recovered by reading the firmware that was on the keyboard.
 
-![⌘ Esc window (Large)](corne/img/overlay-large.png)
-
-**Try it online: [Corne Dojo](https://thmaureira.github.io/keyboard-01/)**
+## Gallery
 
 | Corne Dojo (FULL) | One layer (LOWER) |
 |---|---|
