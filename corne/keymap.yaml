@@ -107,7 +107,7 @@ layers:
       bl: ▼
       br: ⇧;
     - t: .
-      tl: '0'
+      tl: Enter
       bl: ↘
       br: '⇧:'
     - t: '-'
@@ -125,6 +125,7 @@ layers:
     - t: Space
       tr: '='
     - t: Enter
+      tl: '0'
     - t: RAISE
       br: ⇧TT · layer
       type: lk-raise
@@ -334,8 +335,7 @@ layers:
     - t: '3'
       s: ·
       type: led-ff5400
-    - t: '0'
-      s: '='
+    - t: Enter
       type: led-ff5400
     - t: .
       s: ':'
@@ -349,7 +349,8 @@ layers:
       type: trans led-7400ff
     - t: Space
       type: led-7400ff
-    - t: Enter
+    - t: '0'
+      s: '='
       type: led-7400ff
     - t: ADJUST
       s: TT · layer
