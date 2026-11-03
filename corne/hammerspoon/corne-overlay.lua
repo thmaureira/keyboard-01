@@ -1,5 +1,5 @@
--- Corne: shows Corne Dojo (overlay mode) while ⌘Esc is held. "Fijar" in the window, or the KB-01
--- menu bar item, keeps it open; "Mini" pins a small translucent thumbnail (draggable, bottom-right by default).
+-- Corne: shows Corne Dojo (overlay mode) while ⌘Esc is held. Another key pressed meanwhile, "Pin" in the
+-- window, or the KB-01 menu bar item keeps it open; "Mini" pins a small translucent thumbnail (draggable, bottom-right by default).
 -- The layer tabs in the window switch the layer shown. It reopens in the last size used (Mini or Grande).
 local M = {}
 
@@ -108,9 +108,26 @@ M.controller:setCallback(function(msg)
 end)
 
 -- Holding ⌘Esc shows the window in the last size used; if it is pinned it stays as is.
+-- Pressing any other key while ⌘Esc is held pins it (the key is swallowed, layer reports F16..F20 excepted).
+local ESC, LAYER_CODES = hs.keycodes.map.escape, {}
+for _, key in ipairs({ "f16", "f17", "f18", "f19", "f20" }) do LAYER_CODES[hs.keycodes.map[key]] = true end
+M.pinTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
+  local code = e:getKeyCode()
+  if code == ESC or LAYER_CODES[code] then return false end
+  if not pinned then
+    pinned = true
+    sync()
+  end
+  return true
+end)
+
 M.hotkey = hs.hotkey.bind({ "cmd" }, "escape", function()
-  if not pinned then show() end
+  if not pinned then
+    show()
+    M.pinTap:start()
+  end
 end, function()
+  M.pinTap:stop()
   if not pinned then hide() end
 end)
 
