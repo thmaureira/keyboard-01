@@ -22,7 +22,7 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 // Miryoku-style: each layer is held with one thumb and its keys sit on the other hand.
-// LOWER (left thumb): numpad on the right hand (its Backspace deletes a word, ⌥⌫), arrows (↑ on W), . and , around ↑, line start/end and modifiers on the left.
+// LOWER (left thumb): numpad on the right hand, 1 on N (its Backspace deletes a word, ⌥⌫), arrows (↑ on W), . and , around ↑, line start/end and modifiers on the left.
 // RAISE (right thumb): symbols on the left hand; Mission Control, paste, copy, cut, undo and modifiers on the right.
 // ADJUST (both): COLEMAK and the mouse on the left; Rectangle window shortcuts and media on the right.
 // Symbols follow macOS with the Spanish ISO layout.
@@ -35,9 +35,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 KC_LGUI, TT(_LOWER),     KC_SPC,         KC_ENT, TT(_RAISE),      TD(1)
     ),
     [_LOWER] = LAYOUT_split_3x6_3(
-             KC_ESC,     KC_DOT,      KC_UP,    KC_COMM,      KC_NO,      KC_NO,  LSFT(KC_RBRC),       KC_7,       KC_8,       KC_9,    KC_SLSH,LALT(KC_BSPC),
-             KC_TAB,    KC_LEFT,    KC_DOWN,    KC_RGHT,LGUI(KC_LEFT),LGUI(KC_RGHT),     LSFT(KC_7),       KC_4,       KC_5,       KC_6,    KC_RBRC, LSFT(KC_0),
-            KC_LSFT,    KC_LGUI,    KC_LALT,    KC_LCTL,      KC_NO,      KC_NO,           KC_0,       KC_1,       KC_2,       KC_3,     KC_DOT,    KC_COMM,
+             KC_ESC,     KC_DOT,      KC_UP,    KC_COMM,      KC_NO,      KC_NO,        KC_7,       KC_8,       KC_9,LSFT(KC_RBRC),    KC_SLSH,LALT(KC_BSPC),
+             KC_TAB,    KC_LEFT,    KC_DOWN,    KC_RGHT,LGUI(KC_LEFT),LGUI(KC_RGHT),           KC_4,       KC_5,       KC_6, LSFT(KC_7),    KC_RBRC, LSFT(KC_0),
+            KC_LSFT,    KC_LGUI,    KC_LALT,    KC_LCTL,      KC_NO,      KC_NO,           KC_1,       KC_2,       KC_3,       KC_0,     KC_DOT,    KC_COMM,
                                                 KC_LGUI,    KC_TRNS,     KC_SPC,         KC_ENT,TT(_ADJUST),      TD(1)
     ),
     [_RAISE] = LAYOUT_split_3x6_3(

@@ -182,27 +182,27 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 <g transform="translate(532, 42)" class="key keypos-6">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">Y</text>
-<text x="-24" y="-24" class="key tl">*</text>
+<text x="-24" y="-24" class="key tl">7</text>
 <text x="24" y="-24" class="key tr">MCtl</text>
 </g>
 <g transform="translate(588, 35)" class="key keypos-7">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">U</text>
-<text x="-24" y="-24" class="key tl">7</text>
+<text x="-24" y="-24" class="key tl">8</text>
 <text x="24" y="-24" class="key tr">Paste</text>
 <text x="-24" y="24" class="key bl">↖</text>
 </g>
 <g transform="translate(644, 28)" class="key keypos-8">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">I</text>
-<text x="-24" y="-24" class="key tl">8</text>
+<text x="-24" y="-24" class="key tl">9</text>
 <text x="24" y="-24" class="key tr">Copy</text>
 <text x="-24" y="24" class="key bl">▲</text>
 </g>
 <g transform="translate(700, 35)" class="key keypos-9">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">O</text>
-<text x="-24" y="-24" class="key tl">9</text>
+<text x="-24" y="-24" class="key tl">*</text>
 <text x="24" y="-24" class="key tr">Cut</text>
 <text x="-24" y="24" class="key bl">↗</text>
 </g>
@@ -260,25 +260,25 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 <g transform="translate(532, 98)" class="key keypos-18">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">H</text>
-<text x="-24" y="-24" class="key tl">/</text>
+<text x="-24" y="-24" class="key tl">4</text>
 <text x="-24" y="24" class="key bl">Disp→</text>
 </g>
 <g transform="translate(588, 91)" class="key keypos-19">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">J</text>
-<text x="-24" y="-24" class="key tl">4</text>
+<text x="-24" y="-24" class="key tl">5</text>
 <text x="-24" y="24" class="key bl">◀</text>
 </g>
 <g transform="translate(644, 84)" class="key keypos-20">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">K</text>
-<text x="-24" y="-24" class="key tl">5</text>
+<text x="-24" y="-24" class="key tl">6</text>
 <text x="-24" y="24" class="key bl">Max</text>
 </g>
 <g transform="translate(700, 91)" class="key keypos-21">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">L</text>
-<text x="-24" y="-24" class="key tl">6</text>
+<text x="-24" y="-24" class="key tl">/</text>
 <text x="-24" y="24" class="key bl">▶</text>
 </g>
 <g transform="translate(756, 105)" class="key keypos-22">
@@ -328,25 +328,25 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 <g transform="translate(532, 154)" class="key keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">N</text>
-<text x="-24" y="-24" class="key tl">0</text>
+<text x="-24" y="-24" class="key tl">1</text>
 </g>
 <g transform="translate(588, 147)" class="key keypos-31">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">M</text>
-<text x="-24" y="-24" class="key tl">1</text>
+<text x="-24" y="-24" class="key tl">2</text>
 <text x="-24" y="24" class="key bl">↙</text>
 </g>
 <g transform="translate(644, 140)" class="key keypos-32">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">,</text>
-<text x="-24" y="-24" class="key tl">2</text>
+<text x="-24" y="-24" class="key tl">3</text>
 <text x="-24" y="24" class="key bl">▼</text>
 <text x="24" y="24" class="key br">⇧;</text>
 </g>
 <g transform="translate(700, 147)" class="key keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="0" class="key tap">.</text>
-<text x="-24" y="-24" class="key tl">3</text>
+<text x="-24" y="-24" class="key tl">0</text>
 <text x="-24" y="24" class="key bl">↘</text>
 <text x="24" y="24" class="key br">⇧:</text>
 </g>
@@ -639,22 +639,22 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 </g>
 <g transform="translate(532, 42)" class="key led-ff5400 keypos-6">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
-<text x="0" y="0" class="key led-ff5400 tap">*</text>
-</g>
-<g transform="translate(588, 35)" class="key led-ff5400 keypos-7">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">7</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">/</text>
 </g>
-<g transform="translate(644, 28)" class="key led-ff5400 keypos-8">
+<g transform="translate(588, 35)" class="key led-ff5400 keypos-7">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">8</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">(</text>
 </g>
-<g transform="translate(700, 35)" class="key led-ff5400 keypos-9">
+<g transform="translate(644, 28)" class="key led-ff5400 keypos-8">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">9</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">)</text>
+</g>
+<g transform="translate(700, 35)" class="key led-ff5400 keypos-9">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
+<text x="0" y="0" class="key led-ff5400 tap">*</text>
 </g>
 <g transform="translate(756, 49)" class="key led-ff5400 keypos-10">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
@@ -700,22 +700,22 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 </g>
 <g transform="translate(532, 98)" class="key led-ff5400 keypos-18">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
-<text x="0" y="0" class="key led-ff5400 tap">/</text>
-</g>
-<g transform="translate(588, 91)" class="key led-ff5400 keypos-19">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">4</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">$</text>
 </g>
-<g transform="translate(644, 84)" class="key led-ff5400 keypos-20">
+<g transform="translate(588, 91)" class="key led-ff5400 keypos-19">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">5</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">%</text>
 </g>
-<g transform="translate(700, 91)" class="key led-ff5400 keypos-21">
+<g transform="translate(644, 84)" class="key led-ff5400 keypos-20">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">6</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">&amp;</text>
+</g>
+<g transform="translate(700, 91)" class="key led-ff5400 keypos-21">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
+<text x="0" y="0" class="key led-ff5400 tap">/</text>
 </g>
 <g transform="translate(756, 105)" class="key led-ff5400 keypos-22">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
@@ -750,23 +750,23 @@ rect.key.lk-colemak { --lc: #ff3b3b; animation: breath 2.4s ease-in-out infinite
 </g>
 <g transform="translate(532, 154)" class="key led-ff5400 keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
-<text x="0" y="0" class="key led-ff5400 tap">0</text>
-<text x="0" y="-24" class="key led-ff5400 shifted">=</text>
-</g>
-<g transform="translate(588, 147)" class="key led-ff5400 keypos-31">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">1</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">!</text>
 </g>
-<g transform="translate(644, 140)" class="key led-ff5400 keypos-32">
+<g transform="translate(588, 147)" class="key led-ff5400 keypos-31">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">2</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">&quot;</text>
 </g>
-<g transform="translate(700, 147)" class="key led-ff5400 keypos-33">
+<g transform="translate(644, 140)" class="key led-ff5400 keypos-32">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
 <text x="0" y="0" class="key led-ff5400 tap">3</text>
 <text x="0" y="-24" class="key led-ff5400 shifted">·</text>
+</g>
+<g transform="translate(700, 147)" class="key led-ff5400 keypos-33">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>
+<text x="0" y="0" class="key led-ff5400 tap">0</text>
+<text x="0" y="-24" class="key led-ff5400 shifted">=</text>
 </g>
 <g transform="translate(756, 161)" class="key led-ff5400 keypos-34">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key led-ff5400"/>

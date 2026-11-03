@@ -23,18 +23,18 @@ layers:
     - t: T
       tr: '|'
     - t: Y
-      tl: '*'
+      tl: '7'
       tr: MCtl
     - t: U
-      tl: '7'
+      tl: '8'
       tr: Paste
       bl: ↖
     - t: I
-      tl: '8'
+      tl: '9'
       tr: Copy
       bl: ▲
     - t: O
-      tl: '9'
+      tl: '*'
       tr: Cut
       bl: ↗
     - t: P
@@ -66,16 +66,16 @@ layers:
       tl: End
       tr: /
     - t: H
-      tl: /
+      tl: '4'
       bl: Disp→
     - t: J
-      tl: '4'
+      tl: '5'
       bl: ◀
     - t: K
-      tl: '5'
+      tl: '6'
       bl: Max
     - t: L
-      tl: '6'
+      tl: /
       bl: ▶
     - t: Ñ
       tl: +
@@ -98,16 +98,16 @@ layers:
     - t: B
       tr: º
     - t: N
-      tl: '0'
-    - t: M
       tl: '1'
+    - t: M
+      tl: '2'
       bl: ↙
     - t: ','
-      tl: '2'
+      tl: '3'
       bl: ▼
       br: ⇧;
     - t: .
-      tl: '3'
+      tl: '0'
       bl: ↘
       br: '⇧:'
     - t: '-'
@@ -266,8 +266,6 @@ layers:
       type: led-ff5400
     - t: ''
       type: led-ff5400
-    - t: '*'
-      type: led-ff5400
     - t: '7'
       s: /
       type: led-ff5400
@@ -276,6 +274,8 @@ layers:
       type: led-ff5400
     - t: '9'
       s: )
+      type: led-ff5400
+    - t: '*'
       type: led-ff5400
     - t: '-'
       s: _
@@ -297,8 +297,6 @@ layers:
     - t: Line end
       s: ⌘→
       type: led-ff5400
-    - t: /
-      type: led-ff5400
     - t: '4'
       s: $
       type: led-ff5400
@@ -307,6 +305,8 @@ layers:
       type: led-ff5400
     - t: '6'
       s: '&'
+      type: led-ff5400
+    - t: /
       type: led-ff5400
     - t: +
       s: '*'
@@ -325,9 +325,6 @@ layers:
       type: led-ff5400
     - t: ''
       type: led-ff5400
-    - t: '0'
-      s: '='
-      type: led-ff5400
     - t: '1'
       s: '!'
       type: led-ff5400
@@ -336,6 +333,9 @@ layers:
       type: led-ff5400
     - t: '3'
       s: ·
+      type: led-ff5400
+    - t: '0'
+      s: '='
       type: led-ff5400
     - t: .
       s: ':'
