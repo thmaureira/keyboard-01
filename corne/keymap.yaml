@@ -18,6 +18,7 @@ layers:
       tr: '['
       bl: W↑
     - t: R
+      tl: '!'
       tr: ']'
       bl: W↓
     - t: T
@@ -263,7 +264,7 @@ layers:
     - t: ','
       s: ;
       type: led-ff5400
-    - t: ''
+    - t: '!'
       type: led-ff5400
     - t: ''
       type: led-ff5400
