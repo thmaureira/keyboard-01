@@ -6,7 +6,7 @@ layers:
   - - t: Esc
       tr: '`'
     - t: Q
-      tl: .
+      tl: '?'
       tr: '@'
       bl: Click
     - t: W
@@ -22,6 +22,7 @@ layers:
       tr: ']'
       bl: W↓
     - t: T
+      tl: Shot
       tr: '|'
     - t: Y
       tl: '7'
@@ -95,6 +96,7 @@ layers:
     - t: C
       tr: '{'
     - t: V
+      tl: '"'
       tr: '}'
     - t: B
       tr: º
@@ -256,8 +258,7 @@ layers:
   LOWER:
   - - t: Esc
       type: led-7400ff
-    - t: .
-      s: ':'
+    - t: '?'
       type: led-ff5400
     - t: ↑
       type: led-ff5400
@@ -266,7 +267,8 @@ layers:
       type: led-ff5400
     - t: '!'
       type: led-ff5400
-    - t: ''
+    - t: Shot
+      s: ⌘⇧4
       type: led-ff5400
     - t: '7'
       s: /
@@ -323,7 +325,7 @@ layers:
       type: led-ff5400
     - t: Ctrl
       type: led-ff5400
-    - t: ''
+    - t: '"'
       type: led-ff5400
     - t: ''
       type: led-ff5400
