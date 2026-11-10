@@ -39,7 +39,7 @@ hold <kbd>⌘</kbd> + <kbd>Esc</kbd> and the whole keyboard appears on screen.
 | **On-screen help** | <kbd>⌘</kbd> <kbd>Esc</kbd> opens the map on the Mac, switching to whatever layer the keyboard reports |
 | **Corne Dojo** | Web trainer to learn the layers by typing, [online](https://thmaureira.github.io/keyboard-01/) |
 | **Miryoku-inspired** | Numpad and arrows on LOWER, symbols on RAISE, mouse, Rectangle windows and media on ADJUST |
-| **EVA-01 OLED** | The unit stands, walks, sprints, crouches, fires and draws the lance as you type |
+| **EVA-01 OLED** | The unit stands, walks, sprints, crouches, raises the AT field, fires, draws the lance and takes flight as you type |
 
 Configuration of my Corne (foostan crkbd, QMK, Pro Micro), recovered by reading the firmware that was on the keyboard.
 
@@ -175,7 +175,7 @@ cp corne/corne-dojo.html ~/.hammerspoon/corne/   # the ⌘ Esc window uses the s
 
 ![OLED states](corne/img/oled.png)
 
-- **Left half**: the layer name, `CAPS` when Caps Lock is on and an EVA-01 silhouette that follows your typing speed. It faces the front when idle, walks under 40 wpm, sprints from 40 and gets a halo from 70. Space makes it crouch, Caps Lock makes it hold the rifle (every key fires a bullet) and on COLEMAK it carries the lance.
+- **Left half**: the layer name, `CAPS` when Caps Lock is on and an EVA-01 silhouette that follows your typing speed. It faces the front when idle, walks under 40 wpm, sprints from 40 and floats with wings from 70. Space makes it crouch, Backspace raises the AT field, Caps Lock makes it hold the rifle (every key fires a bullet) and on COLEMAK it carries the lance.
 - **Right half**: the KB-01 plate and a SYNC bar, where 100 wpm is full sync, with the wpm below.
 
 The sprites in `eva_sprites.h` are traced from reference figures, with colors and shading turned into tones and Atkinson-dithered to 1 bit, and stored as 32 px wide OLED pages.

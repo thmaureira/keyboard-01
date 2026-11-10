@@ -5,7 +5,8 @@
 //  2. Every layer change taps F16..F20 so the Mac on-screen help can follow the active layer.
 //  3. Two taps lock LOWER/RAISE/ADJUST (TAPPING_TOGGLE 2 in config.h).
 // OLED: EVA-01 style. Left: layer, Caps Lock and an EVA-01 silhouette (faces the front when idle, walks, runs,
-// gets a halo from 70 wpm, holds the rifle with Caps Lock, crouches on Space, carries the lance on COLEMAK). Right: the KB-01 plate and a SYNC bar (100 wpm = full sync).
+// floats with wings from 70 wpm, holds the rifle with Caps Lock, crouches on Space, raises the AT field on Backspace,
+// carries the lance on COLEMAK). Right: the KB-01 plate and a SYNC bar (100 wpm = full sync).
 #include QMK_KEYBOARD_H
 #include "lib/lib8tion/lib8tion.h"
 
@@ -128,8 +129,8 @@ bool rgb_matrix_indicators_user(void) {
 #    include "eva_sprites.h"
 
 // OLED (both halves rotated, 32x128). Left: layer, Caps Lock and an EVA-01 silhouette: faces the front
-// when idle, walks under 40 wpm, runs from 40 (with the halo from 70), holds the rifle with Caps Lock, crouches
-// on Space and carries the lance on COLEMAK. Right: the KB-01 plate and the SYNC bar (100 wpm = full sync).
+// when idle, walks under 40 wpm, runs from 40, floats with wings from 70, holds the rifle with Caps Lock, crouches
+// on Space, raises the AT field on Backspace and carries the lance on COLEMAK. Right: the KB-01 plate and the SYNC bar (100 wpm = full sync).
 #    define OLED_W 32
 #    define FULL_SYNC 100
 #    define RUN_WPM   40   // from here on the EVA runs
@@ -191,7 +192,7 @@ static void write_tall(const char *str) {
 }
 
 // With the rifle out (Caps Lock), every key fires a bullet from the muzzle to the right edge. The muzzle is
-// at (26, 83) standing and at (22, 94) crouched.
+// at (26, 80) standing and at (23, 92) crouched.
 static uint8_t  bullets[3];   // x of each bullet in flight, 0 = free
 static uint16_t bullet_timer;
 static void fire(void) {
@@ -213,12 +214,17 @@ static void draw_bullets(uint8_t x0, uint8_t y) {
     }
 }
 
-// Space makes the EVA crouch for 300 ms.
-static uint16_t crouch_timer;
-static bool     crouching;
-static bool crouched(void) {
-    if (crouching && timer_elapsed(crouch_timer) >= 300) crouching = false;
-    return crouching;
+// Space makes the EVA crouch and Backspace raises the AT field, each for 300 ms.
+enum { POSE_NONE, POSE_CROUCH, POSE_SHIELD };
+static uint8_t  pose;
+static uint16_t pose_timer;
+static uint8_t posed(void) {
+    if (pose && timer_elapsed(pose_timer) >= 300) pose = POSE_NONE;
+    return pose;
+}
+static void strike(uint8_t p) {
+    pose       = p;
+    pose_timer = timer_read();
 }
 
 static void render_left(uint8_t wpm, bool tick) {
@@ -232,9 +238,12 @@ static void render_left(uint8_t wpm, bool tick) {
     bool caps = host_keyboard_led_state().caps_lock;
     oled_set_cursor(0, 4);
     oled_write_P(caps ? PSTR("CAPS") : PSTR("    "), caps);
-    if (crouched()) {
+    uint8_t p = posed();
+    if (p == POSE_CROUCH) {
         draw_eva(eva_crouch, EVA_CROUCH_PAGES, 0, 0);                         // Space: crouch with the rifle
         if (caps) draw_bullets(23, 92);
+    } else if (p == POSE_SHIELD) {
+        draw_eva(eva_shield, EVA_SHIELD_PAGES, 0, 0);                         // Backspace: AT field overhead
     } else if (caps) {
         draw_eva(eva_gun, EVA_GUN_PAGES, 0, 0);                               // standing, rifle out
         draw_bullets(26, 80);
@@ -247,7 +256,7 @@ static void render_left(uint8_t wpm, bool tick) {
     } else if (wpm < HALO_WPM) {
         draw_eva(eva_run, EVA_RUN_PAGES, tick ? 2 : 0, 0);                    // sprint, bouncing 2 px
     } else {
-        draw_eva(eva_sync, EVA_SYNC_PAGES, tick ? 2 : 0, 0);                  // 70+ wpm: sprint with the halo
+        draw_eva(eva_sync, EVA_SYNC_PAGES, tick ? 2 : 0, 0);                  // 70+ wpm: winged, floating
     }
     hazard(15, 2);
 }
@@ -298,10 +307,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
 #ifdef OLED_ENABLE
         case KC_SPC:
-            if (record->event.pressed) {
-                crouching    = true;
-                crouch_timer = timer_read();
-            }
+            if (record->event.pressed) strike(POSE_CROUCH);
+            break;
+        case KC_BSPC:
+        case LALT(KC_BSPC):
+            if (record->event.pressed) strike(POSE_SHIELD);
             break;
         default:
             if (record->event.pressed && host_keyboard_led_state().caps_lock) fire();
