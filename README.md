@@ -178,7 +178,7 @@ cp corne/corne-dojo.html ~/.hammerspoon/corne/   # the ⌘ Esc window uses the s
 - **Left half**: the layer name, `CAPS` when Caps Lock is on and an EVA-01 silhouette that follows your typing speed. It faces the front when idle, walks under 40 wpm, sprints from 40 and gets a halo from 70. Space makes it crouch, Caps Lock makes it hold the rifle (every key fires a bullet) and on COLEMAK it carries the lance.
 - **Right half**: the KB-01 plate and a SYNC bar, where 100 wpm is full sync, with the wpm below.
 
-The sprites in `eva_sprites.h` are traced from reference figures and stored as 32 px wide OLED pages.
+The sprites in `eva_sprites.h` are traced from reference figures, with colors and shading turned into tones and Atkinson-dithered to 1 bit, and stored as 32 px wide OLED pages.
 
 To fit in 28 KB, features the keymap does not use are compiled out: one-shot keys, 32-bit layer state, the other RGB effects (except Breathing) and LED state sync between halves.
 

@@ -234,10 +234,10 @@ static void render_left(uint8_t wpm, bool tick) {
     oled_write_P(caps ? PSTR("CAPS") : PSTR("    "), caps);
     if (crouched()) {
         draw_eva(eva_crouch, EVA_CROUCH_PAGES, 0, 0);                         // Space: crouch with the rifle
-        if (caps) draw_bullets(22, 94);
+        if (caps) draw_bullets(23, 92);
     } else if (caps) {
         draw_eva(eva_gun, EVA_GUN_PAGES, 0, 0);                               // standing, rifle out
-        draw_bullets(26, 83);
+        draw_bullets(26, 80);
     } else if (get_highest_layer(default_layer_state) == _COLEMAK) {
         draw_eva(eva_lance, EVA_LANCE_PAGES, tick, 0);                        // lance, breathing
     } else if (wpm == 0) {
